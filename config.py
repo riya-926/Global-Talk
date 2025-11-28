@@ -18,7 +18,7 @@ import os
 DEFAULT_TARGET_LANG = "en"
 
 # Duration of each audio chunk recorded in real time (seconds)
-AUDIO_CHUNK_SECONDS = 1.0
+AUDIO_CHUNK_SECONDS = 3.0
 
 # Sample rate for recording audio (Whisper prefers 16k)
 AUDIO_SAMPLE_RATE = 16000

@@ -1,177 +1,188 @@
-# main.py
 """
-Simple live loop for the Real-Time Meeting Translator (no UI yet).
+Improved main.py with CONTINUOUS recording (no gaps).
 
-Flow:
-- Ask user what language they want to see translations in
-- Repeatedly:
-    - Record a short audio chunk from the mic
-    - Optionally skip very quiet chunks (background noise)
-    - Transcribe + auto-detect language with Whisper
-    - Skip chunks where detected language matches user's own language
-      (assuming that's likely the user speaking)
-    - Translate text into target language with GPT
-    - Print original + translated text in the terminal
+Changes:
+- Records audio continuously in a background thread
+- Processes chunks in parallel using a queue
+- No missed speech between chunks
 """
 
 import time
-from typing import Optional
+import threading
+import queue
+from collections import deque
 
 import numpy as np
+import sounddevice as sd
 
 import config
-from audio_manager import AudioManager
 from stt_module import STTModule
 from translation_module import TranslationModule
 
 
-def canonicalize_target_lang(user_input: str) -> str:
-    """
-    Normalize the target language the user types so we can compare it
-    to Whisper's detected language more reliably.
-
-    Examples:
-      "en" -> "english"
-      "english" -> "english"
-      "fr" -> "french"
-      "hi" -> "hindi"
-    """
-    s = user_input.strip().lower()
-
-    mapping = {
-        "en": "english",
-        "eng": "english",
-        "english": "english",
-
-        "es": "spanish",
-        "spa": "spanish",
-        "spanish": "spanish",
-
-        "fr": "french",
-        "fra": "french",
-        "french": "french",
-
-        "hi": "hindi",
-        "hin": "hindi",
-        "hindi": "hindi",
-
-        "ur": "urdu",
-        "urd": "urdu",
-        "urdu": "urdu",
-
-        "pt": "portuguese",
-        "por": "portuguese",
-        "portuguese": "portuguese",
-
-        "de": "german",
-        "ger": "german",
-        "german": "german",
-
-        "it": "italian",
-        "ita": "italian",
-        "italian": "italian",
-    }
-
-    return mapping.get(s, s)  # default to whatever they typed if unknown
+def is_useful_transcript(text: str) -> bool:
+    """Return False for tiny junk like '.', '..', '?' or 1-2 character clips."""
+    clean = text.strip()
+    if not clean:
+        return False
+    if len(clean) <= 2 and all(ch in ".?!," for ch in clean):
+        return False
+    return True
 
 
-def is_very_quiet(audio_chunk: np.ndarray, threshold: float = 0.005) -> bool:
-    """
-    Simple heuristic to skip very quiet chunks (likely background noise).
+class ContinuousAudioRecorder:
+    """Records audio continuously and puts chunks into a queue."""
+    
+    def __init__(self, chunk_duration: float, sample_rate: int, audio_queue: queue.Queue):
+        self.chunk_duration = chunk_duration
+        self.sample_rate = sample_rate
+        self.audio_queue = audio_queue
+        self.is_recording = False
+        self.audio_buffer = deque()
+        
+    def audio_callback(self, indata, frames, time_info, status):
+        """Called by sounddevice for each audio block."""
+        if status:
+            print(f"Audio status: {status}")
+        # Add audio to buffer
+        self.audio_buffer.extend(indata[:, 0].copy())  # mono channel
+        
+        # If we have enough samples for a chunk, put it in the queue
+        chunk_size = int(self.sample_rate * self.chunk_duration)
+        while len(self.audio_buffer) >= chunk_size:
+            # Extract chunk
+            chunk = np.array([self.audio_buffer.popleft() for _ in range(chunk_size)])
+            self.audio_queue.put(chunk)
+    
+    def start(self):
+        """Start continuous recording in background."""
+        self.is_recording = True
+        self.stream = sd.InputStream(
+            samplerate=self.sample_rate,
+            channels=1,
+            callback=self.audio_callback,
+            blocksize=int(self.sample_rate * 0.1)  # 100ms blocks
+        )
+        self.stream.start()
+        print("🎤 Continuous recording started...")
+    
+    def stop(self):
+        """Stop recording."""
+        self.is_recording = False
+        if hasattr(self, 'stream'):
+            self.stream.stop()
+            self.stream.close()
+        print("🎤 Recording stopped.")
 
-    :param audio_chunk: 1D numpy array of audio samples [-1, 1].
-    :param threshold: Mean absolute amplitude below which we treat as "silent/noise".
-    """
-    if audio_chunk.size == 0:
-        return True
-    mean_amp = float(np.mean(np.abs(audio_chunk)))
-    return mean_amp < threshold
+
+def process_audio_worker(audio_queue: queue.Queue, result_queue: queue.Queue, 
+                         stt: STTModule, translator: TranslationModule, 
+                         target_lang: str, stop_event: threading.Event):
+    """Worker thread that processes audio chunks from the queue."""
+    
+    while not stop_event.is_set() or not audio_queue.empty():
+        try:
+            # Get audio chunk with timeout
+            audio_chunk = audio_queue.get(timeout=0.5)
+            
+            # 1) Transcribe + detect language
+            transcript, detected_lang = stt.transcribe_and_detect(
+                audio_chunk, 
+                config.AUDIO_SAMPLE_RATE
+            )
+            clean = transcript.strip()
+            
+            if not is_useful_transcript(clean):
+                continue
+            
+            # 2) Translate
+            translated = translator.translate(
+                text=clean,
+                source_lang=detected_lang,
+                target_lang=target_lang,
+            )
+            
+            # 3) Put result in output queue
+            result_queue.put({
+                'original': clean,
+                'translated': translated,
+                'language': detected_lang
+            })
+            
+        except queue.Empty:
+            continue
+        except Exception as e:
+            print(f"❌ Error processing audio: {e}")
 
 
 def main():
-    # Validate config (checks OPENAI_API_KEY)
+    # Check API key
     config.validate_config()
 
-    print("=== Global-Talk: Terminal Demo ===")
-    print("This will record short chunks from your microphone,")
-    print("transcribe them with Whisper, and translate them using GPT.\n")
+    print("=== Global-Talk: Continuous Real-Time Translation ===")
+    print("This will continuously record and translate in real-time.\n")
 
-    # Ask user for target language
-    target_lang_input = input(
-        "Enter the language you want to see translations in "
+    target_lang = input(
+        "Enter the language you want subtitles in "
         "(e.g., 'english', 'en', 'hindi', 'french') [default: english]: "
     ).strip()
-    if target_lang_input == "":
-        target_lang_input = "english"
+    if target_lang == "":
+        target_lang = "english"
 
-    # Canonicalize for comparison with Whisper's detected language
-    canonical_target_lang = canonicalize_target_lang(target_lang_input)
-
-    print(f"\nTarget language set to: {canonical_target_lang}")
+    print(f"\nTarget language set to: {target_lang}")
     print(f"Chunk duration: {config.AUDIO_CHUNK_SECONDS} seconds")
-    print("Press Ctrl+C to stop.\n")
+    print("Speak near your mic. Press Ctrl+C to stop.\n")
 
     # Initialize modules
-    audio_manager = AudioManager()
     stt = STTModule()
     translator = TranslationModule()
-
+    
+    # Create queues for communication between threads
+    audio_queue = queue.Queue(maxsize=10)  # Limit queue size to prevent memory issues
+    result_queue = queue.Queue()
+    stop_event = threading.Event()
+    
+    # Start continuous recorder
+    recorder = ContinuousAudioRecorder(
+        chunk_duration=config.AUDIO_CHUNK_SECONDS,
+        sample_rate=config.AUDIO_SAMPLE_RATE,
+        audio_queue=audio_queue
+    )
+    recorder.start()
+    
+    # Start processing worker thread
+    worker_thread = threading.Thread(
+        target=process_audio_worker,
+        args=(audio_queue, result_queue, stt, translator, target_lang, stop_event),
+        daemon=True
+    )
+    worker_thread.start()
+    
     try:
+        print("🎧 Listening... (speak now)\n")
+        
         while True:
-            print("🎙️  Listening for next chunk...")
-            audio_chunk, sr = audio_manager.get_audio_chunk()
-
-            # 1) Skip very quiet chunks (background noise / silence)
-            if is_very_quiet(audio_chunk):
-                print("(Very low volume / background noise, skipping this chunk)\n")
-                continue
-
-            # 2) STT + language detection
-            transcript, detected_lang = stt.transcribe_and_detect(audio_chunk, sr)
-
-            if not transcript.strip():
-                print("(No speech detected in this chunk, skipping)\n")
-                continue
-
-            detected_lang_norm = (detected_lang or "").strip().lower()
-
-            # 3) Skip chunks where detected language == user's language
-            #    (Assuming user speaks the target language → this is likely the user)
-            if detected_lang_norm and canonical_target_lang:
-                # Simple matching: exact match OR one contained in the other
-                if (
-                    detected_lang_norm == canonical_target_lang
-                    or canonical_target_lang in detected_lang_norm
-                    or detected_lang_norm in canonical_target_lang
-                ):
-                    print(
-                        f"(Detected language '{detected_lang}' matches your language "
-                        f"'{canonical_target_lang}' → likely you speaking, skipping)\n"
-                    )
-                    continue
-
-            # 4) Otherwise, treat this as "other person" and translate
-            print(f"\n Detected language: {detected_lang}")
-            print(f"Original: {transcript}")
-
-            translated = translator.translate(
-                text=transcript,
-                source_lang=detected_lang,        # from Whisper
-                target_lang=canonical_target_lang,  # normalized
-            )
-
-            print(f" Translated ({canonical_target_lang}): {translated}\n")
-            print("-" * 60)
-
-            # Small pause so prints don't spam too hard
-            time.sleep(0.2)
-
+            # Check for results and print them
+            try:
+                result = result_queue.get(timeout=0.1)
+                print(f"\n🗣  Detected: {result['language']}")
+                print(f"Original: {result['original']}")
+                print(f"🌍 Translated: {result['translated']}")
+                print("-" * 60)
+            except queue.Empty:
+                time.sleep(0.1)
+                
     except KeyboardInterrupt:
-        print("\n\nStopping Global-Talk demo. Goodbye! 👋")
-
+        print("\n\n⏹️  Stopping...")
+        stop_event.set()
+        recorder.stop()
+        worker_thread.join(timeout=2)
+        print("Global-Talk stopped. Goodbye! 👋")
+    
     except Exception as e:
-        print("\n An error occurred:")
-        print(e)
+        print(f"\n❌ An error occurred: {e}")
+        stop_event.set()
+        recorder.stop()
 
 
 if __name__ == "__main__":

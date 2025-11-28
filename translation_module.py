@@ -63,10 +63,12 @@ class TranslationModule:
 
         system_prompt = (
             "You are a translation engine for a real-time meeting app. "
-            "Your job is to translate user text as accurately and naturally as possible, "
-            "preserving meaning and tone. Respond with ONLY the translated text, "
-            "no explanations, no quotes."
+            "Translate as literally and accurately as possible while keeping good grammar. "
+            "NEVER change numbers, dates, times, or days of the week. "
+            "If the text says Monday, keep Monday. If it says Wednesday, keep Wednesday. "
+            "Respond with ONLY the translated text, no explanations, no quotes."
         )
+
 
         user_prompt = (
             f"Source language: {source_desc}\n"
