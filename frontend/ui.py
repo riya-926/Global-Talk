@@ -60,40 +60,41 @@ class GlobalChatUI:
         container = ctk.CTkFrame(self.root, fg_color=CREAM_BG)
         container.pack(fill="both", expand=True)
 
-        # Title
+        # Title with bubble letter style - trying Comic Sans for bubble effect
         title_label = ctk.CTkLabel(
             container,
             text="GLOBAL CHAT",
-            font=("Arial", 72, "bold"),
-            text_color=SOFT_BLUE
+            font=("Comic Sans MS", 85, "bold"),  # Comic Sans has that bubble look
+            text_color=SOFT_BLUE,
         )
-        title_label.pack(pady=(80, 40))
+        title_label.pack(pady=(100, 50))
 
-        # Start button
+        # Start button with shadow effect
         start_btn = ctk.CTkButton(
             container,
-            text="🌍 Start Meeting with Globe",
-            font=("Arial", 18),
+            text="🌍  Start Meeting with Globe",
+            font=("Comic Sans MS", 20, "bold"),
             fg_color=SOFT_BLUE,
             hover_color="#4A8BC2",
-            height=60,
-            width=350,
-            corner_radius=30,
+            height=65,
+            width=380,
+            corner_radius=35,
             command=self.on_start_pressed
         )
-        start_btn.pack(pady=20)
+        start_btn.pack(pady=25)
 
-        # Language selector frame
+        # Language selector with "Subtitles:" label
         lang_frame = ctk.CTkFrame(container, fg_color=CREAM_BG)
-        lang_frame.pack(pady=20)
+        lang_frame.pack(pady=25)
 
-        lang_label = ctk.CTkLabel(
+        # "Subtitles:" label
+        subtitle_label = ctk.CTkLabel(
             lang_frame,
-            text="Record Subtitle: Select Language 🌍",
-            font=("Arial", 14),
+            text="Subtitles:",
+            font=("Comic Sans MS", 18, "bold"),
             text_color=DARK_TEXT
         )
-        lang_label.pack(side="left", padx=10)
+        subtitle_label.pack(side="left", padx=(0, 15))
 
         # Language dropdown
         self.language_var = ctk.StringVar(value="English")
@@ -107,21 +108,25 @@ class GlobalChatUI:
             lang_frame,
             values=language_options,
             variable=self.language_var,
-            font=("Arial", 14),
-            width=200,
+            font=("Comic Sans MS", 16),
+            width=220,
+            height=40,
             fg_color=WHITE,
             button_color=SOFT_BLUE,
-            border_color=LIGHT_GRAY
+            border_color=SOFT_BLUE,
+            border_width=2,
+            corner_radius=20,
+            dropdown_font=("Comic Sans MS", 14)
         )
-        self.lang_dropdown.pack(side="left", padx=10)
+        self.lang_dropdown.pack(side="left")
 
-        # Globe decoration (emoji as placeholder)
+        # Globe decoration - bigger and more prominent
         globe_label = ctk.CTkLabel(
             container,
             text="🌍",
-            font=("Arial", 120)
+            font=("Arial", 140)
         )
-        globe_label.pack(side="bottom", anchor="se", padx=30, pady=30)
+        globe_label.pack(side="bottom", anchor="se", padx=40, pady=40)
 
     def show_translation_screen(self):
         """Display the active translation screen."""
@@ -173,7 +178,7 @@ class GlobalChatUI:
         title = ctk.CTkLabel(
             top_bar,
             text="GLOBAL CHAT",
-            font=("Arial", 28, "bold"),
+            font=("Bahnschrift SemiBold", 32, "bold"),
             text_color=SOFT_BLUE
         )
         title.pack(side="left")
@@ -202,15 +207,15 @@ class GlobalChatUI:
         end_btn = ctk.CTkButton(
             bottom_frame,
             text="END CHAT",
-            font=("Arial", 16, "bold"),
+            font=("Bahnschrift SemiBold", 18, "bold"),
             fg_color=DARK_TEXT,
             hover_color="#1A252F",
-            height=50,
-            width=200,
-            corner_radius=25,
+            height=55,
+            width=220,
+            corner_radius=28,
             command=self.on_end_pressed
         )
-        end_btn.pack(side="bottom", pady=10)
+        end_btn.pack(side="bottom", pady=15)
 
     def add_translation(self, original: str, translated: str, detected_lang: str):
         """Add a new translation to the display."""
@@ -224,42 +229,44 @@ class GlobalChatUI:
             "translated": translated
         })
 
-        # Create translation card
+        # Create translation card with subtle shadow effect
         card = ctk.CTkFrame(
             self.translation_area,
             fg_color=CREAM_BG,
-            corner_radius=10
+            corner_radius=15,
+            border_width=1,
+            border_color=LIGHT_GRAY
         )
-        card.pack(fill="x", padx=10, pady=10)
+        card.pack(fill="x", padx=15, pady=12)
 
-        # Detected language
+        # Detected language with nicer styling
         lang_label = ctk.CTkLabel(
             card,
-            text=f"Detected: {detected_lang}",
-            font=("Arial", 12, "bold"),
+            text=f"🗣️  Detected: {detected_lang.title()}",
+            font=("Bahnschrift", 13, "bold"),
             text_color=SOFT_BLUE
         )
-        lang_label.pack(anchor="w", padx=15, pady=(10, 5))
+        lang_label.pack(anchor="w", padx=20, pady=(15, 5))
 
-        # Original text
+        # Original text with better styling
         original_label = ctk.CTkLabel(
             card,
             text=f"Original: {original}",
-            font=("Arial", 13),
+            font=("Bahnschrift", 14),
             text_color=DARK_TEXT,
-            wraplength=550,
+            wraplength=600,
             justify="left"
         )
-        original_label.pack(anchor="w", padx=15, pady=2)
+        original_label.pack(anchor="w", padx=20, pady=3)
 
-        # Timestamp and translated on same line
+        # Timestamp and translated with better styling
         bottom_frame = ctk.CTkFrame(card, fg_color=CREAM_BG)
-        bottom_frame.pack(fill="x", padx=15, pady=(5, 10))
+        bottom_frame.pack(fill="x", padx=20, pady=(8, 15))
 
         translated_label = ctk.CTkLabel(
             bottom_frame,
             text=f"●●● ",
-            font=("Arial", 14),
+            font=("Bahnschrift", 15, "bold"),
             text_color=SOFT_BLUE
         )
         translated_label.pack(side="left")
@@ -284,9 +291,9 @@ class GlobalChatUI:
         session_files = sorted(self.sessions_dir.glob("session_*.json"), reverse=True)
 
         for session_file in session_files[:10]:  # Show last 10
-            # Parse date from filename
+            # Parse date from filename (format: session_11-28-25_023142.json)
             date_str = session_file.stem.replace("session_", "")
-            display_date = date_str.split("_")[0]  # Just the date part
+            display_date = date_str.split("_")[0]  # Get the date part (11-28-25)
 
             btn = ctk.CTkButton(
                 self.chat_history_frame,
@@ -309,21 +316,28 @@ class GlobalChatUI:
     def save_current_session(self):
         """Save the current session to a JSON file."""
         if not self.current_translations:
+            print("⚠️  No translations to save.")
             return
 
-        filename = self.sessions_dir / f"session_{self.current_session_id}.json"
+        try:
+            # Ensure sessions directory exists
+            self.sessions_dir.mkdir(exist_ok=True)
 
-        session_data = {
-            "session_id": self.current_session_id,
-            "target_language": self.language_var.get(),
-            "translations": self.current_translations,
-            "date": datetime.datetime.now().isoformat()
-        }
+            filename = self.sessions_dir / f"session_{self.current_session_id}.json"
 
-        with open(filename, 'w', encoding='utf-8') as f:
-            json.dump(session_data, f, indent=2, ensure_ascii=False)
+            session_data = {
+                "session_id": self.current_session_id,
+                "target_language": self.language_var.get(),
+                "translations": self.current_translations,
+                "date": datetime.datetime.now().isoformat()
+            }
 
-        print(f"✅ Session saved: {filename}")
+            with open(filename, 'w', encoding='utf-8') as f:
+                json.dump(session_data, f, indent=2, ensure_ascii=False)
+
+            print(f"✅ Session saved: {filename}")
+        except Exception as e:
+            print(f"❌ Error saving session: {e}")
 
     def on_start_pressed(self):
         """Handle start button press."""
@@ -336,14 +350,20 @@ class GlobalChatUI:
 
     def on_end_pressed(self):
         """Handle end chat button press."""
-        # Save session
-        self.save_current_session()
+        try:
+            # Save session first (don't let errors stop the shutdown)
+            self.save_current_session()
+        except Exception as e:
+            print(f"⚠️  Error saving session: {e}")
 
-        # Call external callback if set
+        # Call external callback to stop recording
         if self.on_stop_callback:
-            self.on_stop_callback()
+            try:
+                self.on_stop_callback()
+            except Exception as e:
+                print(f"⚠️  Error stopping recording: {e}")
 
-        # Return to home screen
+        # Always return to home screen
         self.show_home_screen()
 
     def run(self):

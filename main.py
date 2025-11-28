@@ -39,9 +39,36 @@ def is_useful_transcript(text: str) -> bool:
     clean = text.strip()
     if not clean:
         return False
+    if len(clean) <= 3:  # Ignore very short clips
+        return False
     if len(clean) <= 2 and all(ch in ".?!," for ch in clean):
         return False
+    # Filter out common Whisper hallucinations
+    hallucinations = [
+        "thank you", "thank you for watching", "thanks for watching",
+        "bye-bye", "goodbye", ".", "..", "...", "thank you.",
+        "thanks", "bye", "thank you. bye."
+    ]
+    if clean.lower() in hallucinations:
+        return False
     return True
+
+
+def has_voice_activity(audio_chunk: np.ndarray, threshold: float = 0.005) -> bool:
+    """
+    Simple Voice Activity Detection.
+    Returns True if audio chunk has enough energy to be considered speech.
+
+    :param audio_chunk: numpy array of audio samples
+    :param threshold: minimum RMS energy threshold (lower = more sensitive)
+    """
+    # Calculate RMS (Root Mean Square) energy
+    rms = np.sqrt(np.mean(audio_chunk ** 2))
+
+    # Debug: print energy level to help tune threshold
+    # print(f"🔊 Audio energy: {rms:.4f} | Threshold: {threshold}")
+
+    return rms > threshold
 
 
 class ContinuousAudioRecorder:
@@ -165,6 +192,12 @@ class GlobalChatApp:
             try:
                 # Get audio chunk with timeout
                 audio_chunk = self.audio_queue.get(timeout=0.5)
+
+                # Check for voice activity FIRST (skip if silence)
+                if not has_voice_activity(audio_chunk, threshold=0.005):
+                    # Uncomment below to see what's being filtered:
+                    # print("🔇 No voice detected, skipping...")
+                    continue
 
                 # 1) Transcribe + detect language
                 transcript, detected_lang = self.stt.transcribe_and_detect(
