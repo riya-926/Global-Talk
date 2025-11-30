@@ -39,19 +39,10 @@ def is_useful_transcript(text: str) -> bool:
     clean = text.strip()
     if not clean:
         return False
-    if len(clean) <= 3:  # Ignore very short clips
+    # TEMPORARILY RELAXED - accept more to test
+    if len(clean) <= 1:  # Only filter single characters
         return False
-    if len(clean) <= 2 and all(ch in ".?!," for ch in clean):
-        return False
-    # Filter out common Whisper hallucinations
-    hallucinations = [
-        "thank you", "thank you for watching", "thanks for watching",
-        "bye-bye", "goodbye", ".", "..", "...", "thank you.",
-        "thanks", "bye", "thank you. bye."
-    ]
-    if clean.lower() in hallucinations:
-        return False
-    return True
+    return True  # Accept everything else for testing
 
 
 def has_voice_activity(audio_chunk: np.ndarray, threshold: float = 0.005) -> bool:
@@ -65,8 +56,8 @@ def has_voice_activity(audio_chunk: np.ndarray, threshold: float = 0.005) -> boo
     # Calculate RMS (Root Mean Square) energy
     rms = np.sqrt(np.mean(audio_chunk ** 2))
 
-    # Debug: print energy level to help tune threshold
-    # print(f"🔊 Audio energy: {rms:.4f} | Threshold: {threshold}")
+    # DEBUG: print energy level to help tune threshold
+    print(f"🔊 Audio energy: {rms:.4f} | Threshold: {threshold} | {'✅ PROCESSING' if rms > threshold else '❌ SKIPPED'}")
 
     return rms > threshold
 
@@ -188,16 +179,19 @@ class GlobalChatApp:
 
     def process_audio_worker(self):
         """Worker thread that processes audio chunks."""
+        print("🔧 Processing worker started!")
+
         while not self.stop_event.is_set() or not self.audio_queue.empty():
             try:
                 # Get audio chunk with timeout
                 audio_chunk = self.audio_queue.get(timeout=0.5)
+                print("📦 Got audio chunk from queue...")
 
                 # Check for voice activity FIRST (skip if silence)
                 if not has_voice_activity(audio_chunk, threshold=0.005):
-                    # Uncomment below to see what's being filtered:
-                    # print("🔇 No voice detected, skipping...")
                     continue
+
+                print("🎙️ Sending to Whisper API...")
 
                 # 1) Transcribe + detect language
                 transcript, detected_lang = self.stt.transcribe_and_detect(
@@ -206,19 +200,23 @@ class GlobalChatApp:
                 )
                 clean = transcript.strip()
 
+                print(f"📝 Whisper returned: '{clean}' (lang: {detected_lang})")
+
                 if not is_useful_transcript(clean):
+                    print(f"⏭️ Skipping transcript (too short or filtered): '{clean}'")
                     continue
 
-                print(f"\n🗣  Detected: {detected_lang} | Original: {clean}")
+                print(f"🗣  Detected: {detected_lang} | Original: {clean}")
 
                 # 2) Translate
+                print(f"🌍 Translating to {self.target_language}...")
                 translated = self.translator.translate(
                     text=clean,
                     source_lang=detected_lang,
                     target_lang=self.target_language,
                 )
 
-                print(f"🌍 Translated: {translated}")
+                print(f"✅ Translated: {translated}")
 
                 # 3) Put result in output queue
                 self.result_queue.put({
@@ -231,6 +229,8 @@ class GlobalChatApp:
                 continue
             except Exception as e:
                 print(f"❌ Error processing audio: {e}")
+                import traceback
+                traceback.print_exc()
 
     def check_results(self):
         """Check for new translation results and update UI."""
