@@ -1,0 +1,148 @@
+.home-screen {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.home-center {
+    text-align: center;
+    z-index: 2;
+    position: relative;
+}
+
+.title-large {
+    font-size: 90px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 32px;
+    color: white;
+    text-shadow:
+            0 0 40px rgba(255, 255, 255, 0.4),
+            0 0 80px rgba(147, 197, 253, 0.3);
+    letter-spacing: -2px;
+}
+
+.subtitle {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 48px;
+    font-weight: 300;
+}
+
+.start-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    color: white;
+    border: none;
+    padding: 20px 50px;
+    font-size: 19px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s;
+    box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
+}
+
+.start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 50px rgba(59, 130, 246, 0.4);
+}
+
+.globe-emoji {
+    font-size: 26px;
+    animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.language-selector {
+    margin-top: 48px;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+.language-selector label {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+.language-selector select {
+    padding: 14px 28px;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 14px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    min-width: 220px;
+    transition: all 0.2s;
+}
+
+.language-selector select:hover {
+    background: rgba(59, 130, 246, 0.25);
+    border-color: rgba(59, 130, 246, 0.5);
+}
+
+.language-selector select:focus {
+    outline: none;
+    border-color: rgba(59, 130, 246, 0.7);
+}
+
+.language-selector select option {
+    background: #0a1628;
+    color: white;
+}
+
+.floating-globe {
+    position: absolute;
+    bottom: 100px;
+    right: 140px;
+    font-size: 180px;
+    z-index: 1;
+    animation: float 6s ease-in-out infinite;
+    filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.4));
+    pointer-events: none;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-40px) rotate(180deg);
+    }
+}
+
+.help-btn {
+    position: absolute;
+    bottom: 32px;
+    right: 32px;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.help-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+}
