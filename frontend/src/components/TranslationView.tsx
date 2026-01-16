@@ -6,19 +6,31 @@ interface TranslationViewProps {
     messages: TranslationMessage[];
     isRecording: boolean;
     onStopRecording: () => void;
+    onBackToHome?: () => void;
 }
 
 export const TranslationView: React.FC<TranslationViewProps> = ({
                                                                     messages,
                                                                     isRecording,
                                                                     onStopRecording,
+                                                                    onBackToHome,
                                                                 }) => {
     return (
         <div className="meeting-screen">
             <header className="meeting-header">
                 <div className="header-title">
-                    <h2>GLOBAL<br/>CHAT</h2>
+                    <h2>
+                        GLOBAL
+                        <br />
+                        CHAT
+                    </h2>
                 </div>
+
+                {!isRecording && onBackToHome && (
+                    <button className="back-home-btn" onClick={onBackToHome}>
+                        ← Back to Home
+                    </button>
+                )}
 
                 {isRecording && (
                     <div className="recording-badge">
@@ -28,9 +40,11 @@ export const TranslationView: React.FC<TranslationViewProps> = ({
                     </div>
                 )}
 
-                <button className="end-btn" onClick={onStopRecording}>
-                    × End Meeting
-                </button>
+                {isRecording && (
+                    <button className="end-btn" onClick={onStopRecording}>
+                        ✕ End Meeting
+                    </button>
+                )}
             </header>
 
             <div className="meeting-content">
@@ -46,7 +60,7 @@ export const TranslationView: React.FC<TranslationViewProps> = ({
                             <div key={index} className="transcript-row">
                                 <div className="original-card">
                                     <p className="card-label">
-                                        DETECTED: <span className="lang-name">{msg.detectedLanguage}</span>
+                                        DETECTED: <span className="lang-name">{msg.detectedLanguage.toUpperCase()}</span>
                                     </p>
                                     <p className="card-text">{msg.originalText}</p>
                                 </div>

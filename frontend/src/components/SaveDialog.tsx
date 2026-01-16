@@ -1,42 +1,45 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './SaveDialog.css';
 
 interface SaveDialogProps {
-    isOpen: boolean;
     onSave: (name: string) => void;
     onDiscard: () => void;
 }
 
-export default function SaveDialog({ isOpen, onSave, onDiscard }: SaveDialogProps) {
+export const SaveDialog: React.FC<SaveDialogProps> = ({ onSave, onDiscard }) => {
     const [chatName, setChatName] = useState('');
-
-    if (!isOpen) return null;
 
     const handleSave = () => {
         onSave(chatName.trim() || 'Untitled Chat');
-        setChatName('');
     };
 
     return (
-        <div className="modal-overlay" onClick={onDiscard}>
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
-                <h3>Save Conversation</h3>
-                <p>Enter a name for this chat</p>
+        <div className="save-dialog-overlay">
+            <div className="save-dialog">
+                <h2 className="save-dialog-title">Save Conversation</h2>
+                <p className="save-dialog-subtitle">
+                    Enter a name for this chat to save it in your conversation history.
+                </p>
+
                 <input
                     type="text"
+                    className="save-dialog-input"
                     placeholder="e.g., Travel Planning Discussion"
                     value={chatName}
                     onChange={(e) => setChatName(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleSave()}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSave()}
                     autoFocus
                 />
-                <div className="modal-buttons">
-                    <button onClick={onDiscard}>Discard</button>
-                    <button className="primary" onClick={handleSave}>
+
+                <div className="save-dialog-buttons">
+                    <button className="discard-btn" onClick={onDiscard}>
+                        Discard
+                    </button>
+                    <button className="save-btn" onClick={handleSave}>
                         Save Chat
                     </button>
                 </div>
             </div>
         </div>
     );
-}
+};

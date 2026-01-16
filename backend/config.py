@@ -1,20 +1,21 @@
-# config.py
 """
 Configuration file for the Real-Time Meeting Translator.
 Using:
 - OpenAI Whisper (Speech-to-Text + auto language detection)
-- OpenAI GPT-4.1 / GPT-4o-mini (Translation)
+- OpenAI GPT-4o-mini (Translation)
 """
 
 import os
+from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv()
 
 # =========================
 # General App Settings
 # =========================
 
 # Default target language for subtitles (ISO code)
-# Examples: "en" (English), "es" (Spanish), "fr" (French), "hi" (Hindi)
 DEFAULT_TARGET_LANG = "en"
 
 # Duration of each audio chunk recorded in real time (seconds)
@@ -32,15 +33,12 @@ AUDIO_INPUT_DEVICE = None   # Leave None to use system default mic
 # =========================
 
 # Read your OpenAI API key from environment variable
-# DO NOT hard-code your API key here.
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Speech-to-Text (Whisper) model
-# Options: "whisper-1", "gpt-4o-transcribe" in future, etc.
 OPENAI_STT_MODEL = "whisper-1"
 
-# Translation model (use GPT-4o-mini or GPT-4.1 for best accuracy)
-# GPT-4o-mini is cheap + fast + accurate
+# Translation model
 OPENAI_TRANSLATION_MODEL = "gpt-4o-mini"
 
 
@@ -51,7 +49,6 @@ OPENAI_TRANSLATION_MODEL = "gpt-4o-mini"
 def validate_config():
     """
     Ensures that required environment variables are set.
-    Call this at the start of your app.
     """
     missing = []
 
@@ -60,12 +57,14 @@ def validate_config():
 
     if missing:
         msg = (
-            "Missing required configuration values:\n" +
+            "❌ Missing required configuration:\n" +
             "\n".join(f" - {m}" for m in missing) +
-            "\n\nFix: Set them as environment variables.\n\n"
-            "Example (Windows PowerShell):\n"
-            "  $env:OPENAI_API_KEY=\"your_key_here\"\n\n"
-            "Example (macOS/Linux):\n"
-            "  export OPENAI_API_KEY=\"your_key_here\""
+            "\n\n📝 Create a .env file with:\n"
+            "OPENAI_API_KEY=your-key-here\n\n"
+            "Or set as environment variable."
         )
         raise RuntimeError(msg)
+    
+    print("✅ Configuration validated!")
+    print(f"   Using model: {OPENAI_TRANSLATION_MODEL}")
+    print(f"   Audio chunks: {AUDIO_CHUNK_SECONDS}s")

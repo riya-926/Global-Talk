@@ -8,6 +8,7 @@ export interface TranslationMessage {
 
 export interface SavedChat {
     id: string;
+    name: string;
     timestamp: string;
     messages: TranslationMessage[];
     targetLanguage: string;

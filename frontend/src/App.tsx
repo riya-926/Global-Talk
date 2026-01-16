@@ -2,17 +2,20 @@ import { useState, useEffect } from 'react';
 import { Home } from './components/Home';
 import { TranslationView } from './components/TranslationView';
 import { Sidebar } from './components/Sidebar';
+import { SaveDialog } from './components/SaveDialog';
+import CornerGlobe from './components/CornerGlobe';
 import { api } from './lib/api';
 import type { SavedChat, TranslationMessage } from './types';
 import './App.css';
 
 function App() {
     const [isRecording, setIsRecording] = useState(false);
-    const [targetLanguage, setTargetLanguage] = useState('es');
+    const [targetLanguage, setTargetLanguage] = useState('en');
     const [messages, setMessages] = useState<TranslationMessage[]>([]);
     const [savedChats, setSavedChats] = useState<SavedChat[]>([]);
     const [currentChatId, setCurrentChatId] = useState<string | null>(null);
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [showSaveDialog, setShowSaveDialog] = useState(false);
 
     // Load saved chats from localStorage
     useEffect(() => {
@@ -64,19 +67,33 @@ function App() {
             await api.stopRecording();
             setIsRecording(false);
 
-            // Save the conversation
-            if (messages.length > 0 && currentChatId) {
-                const newChat: SavedChat = {
-                    id: currentChatId,
-                    timestamp: new Date().toISOString(),
-                    messages: messages,
-                    targetLanguage: targetLanguage
-                };
-                setSavedChats(prev => [newChat, ...prev]);
-            }
+            // Always show save dialog when stopping
+            setShowSaveDialog(true);
         } catch (error) {
             console.error('Error stopping recording:', error);
         }
+    };
+
+    const handleSaveChat = (chatName: string) => {
+        if (currentChatId) {
+            const newChat: SavedChat = {
+                id: currentChatId,
+                name: chatName,
+                timestamp: new Date().toISOString(),
+                messages: messages,
+                targetLanguage: targetLanguage
+            };
+            setSavedChats(prev => [newChat, ...prev]);
+        }
+        setShowSaveDialog(false);
+        setMessages([]);
+        setCurrentChatId(null);
+    };
+
+    const handleDiscardChat = () => {
+        setShowSaveDialog(false);
+        setMessages([]);
+        setCurrentChatId(null);
     };
 
     const handleLoadChat = (chat: SavedChat) => {
@@ -94,14 +111,37 @@ function App() {
         }
     };
 
+    const handleRenameChat = (chatId: string, newName: string) => {
+        setSavedChats(prev => prev.map(chat =>
+            chat.id === chatId ? { ...chat, name: newName } : chat
+        ));
+    };
+
     const handleNewChat = () => {
         setMessages([]);
         setCurrentChatId(null);
         setIsRecording(false);
     };
 
+    // ONLY show globe on homepage (not recording and no messages)
+    const showGlobe = !isRecording && messages.length === 0;
+
     return (
         <div className="app">
+            {/* Globe ONLY shows on homepage */}
+            {showGlobe && <CornerGlobe />}
+
+            {/* Hamburger menu button for small screens */}
+            <button
+                className="hamburger-menu"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                style={{
+                    display: window.innerWidth <= 900 ? 'flex' : 'none'
+                }}
+            >
+                ☰
+            </button>
+
             <Sidebar
                 isOpen={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}
@@ -109,20 +149,10 @@ function App() {
                 onLoadChat={handleLoadChat}
                 onDeleteChat={handleDeleteChat}
                 onNewChat={handleNewChat}
+                onRenameChat={handleRenameChat}
             />
 
             <div className="main-content">
-                <header className="app-header">
-                    <button
-                        className="menu-button"
-                        onClick={() => setSidebarOpen(!sidebarOpen)}
-                    >
-                        ☰
-                    </button>
-                    <h1>🌍 Global Chat</h1>
-                    <div className="header-spacer"></div>
-                </header>
-
                 {!isRecording && messages.length === 0 ? (
                     <Home
                         targetLanguage={targetLanguage}
@@ -137,6 +167,13 @@ function App() {
                     />
                 )}
             </div>
+
+            {showSaveDialog && (
+                <SaveDialog
+                    onSave={handleSaveChat}
+                    onDiscard={handleDiscardChat}
+                />
+            )}
         </div>
     );
 }

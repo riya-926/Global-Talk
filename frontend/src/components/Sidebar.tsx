@@ -9,6 +9,7 @@ interface SidebarProps {
     onLoadChat: (chat: SavedChat) => void;
     onDeleteChat: (chatId: string) => void;
     onNewChat: () => void;
+    onRenameChat: (chatId: string, newName: string) => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -18,16 +19,38 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                                     onLoadChat,
                                                     onDeleteChat,
                                                     onNewChat,
+                                                    onRenameChat,
                                                 }) => {
+    const [sidebarVisible, setSidebarVisible] = React.useState(true);
+
+    const toggleSidebar = () => {
+        setSidebarVisible(!sidebarVisible);
+    };
+
     const formatDate = (timestamp: string) => {
         const date = new Date(timestamp);
-        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        return date.toLocaleDateString('en-US', {
+            month: 'numeric',
+            day: 'numeric',
+            year: 'numeric'
+        }) + ' ' + date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
     };
 
     return (
         <>
+            {/* Hamburger toggle button */}
+            <button className="sidebar-toggle" onClick={toggleSidebar}>
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <div className={`sidebar-overlay ${isOpen ? 'open' : ''}`} onClick={onClose}></div>
-            <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
+            <aside className={`sidebar ${!sidebarVisible ? 'hidden' : ''} ${isOpen ? 'open' : ''}`}>
                 <div className="sidebar-header">
                     <div className="header-content">
                         <span className="icon">🕐</span>
@@ -36,9 +59,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <button className="close-button" onClick={onClose}>✕</button>
                 </div>
 
-                <button className="new-chat-button" onClick={onNewChat}>
-                    ➕ New Chat
-                </button>
+                {/* REMOVED: New Chat button */}
 
                 <div className="chat-list">
                     {savedChats.length === 0 ? (
@@ -52,10 +73,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             >
                                 <span className="chat-icon">💬</span>
                                 <div className="chat-info">
+                                    <p className="chat-name">{chat.name}</p>
                                     <p className="chat-date">{formatDate(chat.timestamp)}</p>
-                                    <p className="chat-preview">
-                                        {chat.messages.length} messages · {chat.targetLanguage}
-                                    </p>
                                 </div>
                                 <button
                                     className="delete-btn"

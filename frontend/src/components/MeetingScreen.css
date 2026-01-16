@@ -1,50 +1,73 @@
 .meeting-screen {
-    flex: 1;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f3460 100%);
+    color: white;
     display: flex;
     flex-direction: column;
+    margin-left: 450px; /* Match bigger sidebar */
+}
+
+@media (max-width: 1200px) {
+    .meeting-screen {
+        margin-left: 350px;
+    }
+}
+
+@media (max-width: 900px) {
+    .meeting-screen {
+        margin-left: 0;
+    }
 }
 
 .meeting-header {
-    padding: 20px 32px;
-    background: rgba(10, 22, 40, 0.6);
-    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2.5rem;
+    background: rgba(10, 14, 39, 0.6);
     backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(78, 168, 222, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 50;
 }
 
 .header-title h2 {
-    font-size: 20px;
+    font-size: 1.2rem;
     font-weight: 900;
     line-height: 1.2;
-    letter-spacing: 0.5px;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: white;
 }
 
 .recording-badge {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
-    background: rgba(239, 68, 68, 0.2);
-    border: 1px solid rgba(239, 68, 68, 0.5);
-    border-radius: 30px;
-    font-size: 14px;
+    gap: 0.75rem;
+    background: rgba(139, 69, 69, 0.25);
+    backdrop-filter: blur(10px);
+    padding: 0.7rem 1.8rem;
+    border-radius: 50px;
+    border: 1px solid rgba(220, 95, 95, 0.4);
     font-weight: 600;
-    color: #fca5a5;
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #ff9999;
 }
 
 .mic-icon {
-    font-size: 16px;
+    font-size: 1.1rem;
 }
 
 .pulse-dot {
     width: 8px;
     height: 8px;
-    background: #ef4444;
+    background: #ff4444;
     border-radius: 50%;
-    animation: pulse 2s infinite;
+    animation: pulse 1.5s ease-in-out infinite;
+    box-shadow: 0 0 8px rgba(255, 68, 68, 0.8);
 }
 
 @keyframes pulse {
@@ -53,71 +76,100 @@
         transform: scale(1);
     }
     50% {
-        opacity: 0.5;
-        transform: scale(1.2);
+        opacity: 0.6;
+        transform: scale(1.4);
     }
 }
 
-.processing {
-    font-size: 12px;
-    color: #60a5fa;
-    margin-left: 8px;
-}
-
 .end-btn {
-    padding: 10px 24px;
-    background: rgba(239, 68, 68, 0.2);
-    border: 1px solid #ef4444;
-    border-radius: 10px;
+    background: rgba(30, 30, 50, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
-    font-size: 14px;
+    padding: 0.7rem 1.5rem;
+    font-size: 0.95rem;
     font-weight: 600;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s;
+    letter-spacing: 0.5px;
 }
 
 .end-btn:hover {
-    background: rgba(239, 68, 68, 0.3);
-    transform: translateY(-2px);
+    background: rgba(50, 50, 70, 0.8);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.back-home-btn {
+    background: rgba(78, 168, 222, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(78, 168, 222, 0.3);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 0.5px;
+}
+
+.back-home-btn:hover {
+    background: rgba(78, 168, 222, 0.25);
+    border-color: rgba(78, 168, 222, 0.5);
+    transform: translateX(-2px);
 }
 
 .meeting-content {
     flex: 1;
-    padding: 32px;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 3rem;
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
 }
 
 .meeting-title {
-    font-size: 32px;
+    font-size: 2rem;
     font-weight: 700;
-    margin-bottom: 32px;
+    margin-bottom: 2.5rem;
+    color: white;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
 }
 
 .transcript-area {
-    max-width: 1200px;
-    margin: 0 auto;
+    flex: 1;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 1.5rem;
+    padding-right: 1rem;
 }
 
 .empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 1.3rem;
+    color: rgba(184, 197, 214, 0.6);
     text-align: center;
-    padding: 80px 20px;
-    font-size: 18px;
-    color: rgba(255, 255, 255, 0.5);
 }
 
 .transcript-row {
-    display: flex;
-    gap: 24px;
-    animation: slideIn 0.3s ease-out;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    animation: slideIn 0.4s ease-out;
 }
 
 @keyframes slideIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(15px);
     }
     to {
         opacity: 1;
@@ -125,60 +177,80 @@
     }
 }
 
-.original-card,
-.translation-card {
-    flex: 1;
-    padding: 20px;
-    border-radius: 16px;
-    transition: all 0.2s;
-}
-
 .original-card {
-    background: rgba(59, 130, 246, 0.15);
-    border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-.original-card:hover {
-    background: rgba(59, 130, 246, 0.2);
-    border-color: rgba(59, 130, 246, 0.5);
-    transform: translateY(-2px);
+    background: rgba(30, 50, 90, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(60, 100, 160, 0.4);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .translation-card {
-    background: rgba(16, 185, 129, 0.15);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.translation-card:hover {
-    background: rgba(16, 185, 129, 0.2);
-    border-color: rgba(16, 185, 129, 0.5);
-    transform: translateY(-2px);
+    background: rgba(20, 60, 60, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(60, 140, 130, 0.4);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .card-label {
-    font-size: 11px;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.85rem;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.6);
+    opacity: 0.8;
 }
 
 .original-card .card-label {
-    color: rgba(147, 197, 253, 0.8);
+    color: #5b9bd5;
 }
 
 .translation-card .card-label {
-    color: rgba(110, 231, 183, 0.8);
+    color: #6bc9b8;
 }
 
 .lang-name {
-    color: rgba(6, 182, 212, 0.9);
+    color: #78b9ff;
     font-weight: 800;
 }
 
 .card-text {
-    font-size: 16px;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, 0.95);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    font-weight: 400;
+    color: white;
+}
+
+/* Scrollbar styling */
+.transcript-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.transcript-area::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+}
+
+.transcript-area::-webkit-scrollbar-thumb {
+    background: rgba(78, 168, 222, 0.3);
+    border-radius: 10px;
+}
+
+.transcript-area::-webkit-scrollbar-thumb:hover {
+    background: rgba(78, 168, 222, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .transcript-row {
+        grid-template-columns: 1fr;
+    }
+
+    .meeting-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
 }

@@ -1,20 +1,25 @@
-# audio_manager.py
 """
 AudioManager for the Real-Time Meeting Translator.
 
 Responsibilities:
 - Access the microphone (or chosen input device)
 - Record short chunks of audio in real time
-- Return audio data in a format that STT (Whisper) can use
+- Save chunks to WAV files for processing
 """
 
 from typing import List, Tuple, Optional
+from pathlib import Path
+from datetime import datetime
+import threading
+import wave
 
 import sounddevice as sd
 import numpy as np
 
-import config
-
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))
+from . import config
 
 class AudioManager:
     def __init__(
@@ -35,18 +40,22 @@ class AudioManager:
         """
         self.chunk_duration = chunk_duration or config.AUDIO_CHUNK_SECONDS
         self.sample_rate = sample_rate or config.AUDIO_SAMPLE_RATE
-        # If caller passes an explicit device, use it; otherwise, use config or default
         self.input_device = (
             input_device if input_device is not None else config.AUDIO_INPUT_DEVICE
         )
+        
+        # For continuous recording
+        self.is_recording = False
+        self.recording_thread = None
+        self.output_dir = Path("recordings")
+        self.output_dir.mkdir(exist_ok=True)
+        self.latest_file = None
 
     # ---------- Device Helpers ----------
 
     def list_input_devices(self) -> List[Tuple[int, str]]:
         """
         Return a list of available audio INPUT devices as (index, name).
-
-        This is useful for debugging or letting the user pick a specific mic.
         """
         devices = sd.query_devices()
         input_devices: List[Tuple[int, str]] = []
@@ -70,26 +79,78 @@ class AudioManager:
         num_frames = int(self.sample_rate * self.chunk_duration)
 
         try:
-            # This call will trigger the OS mic permission popup the first time
             recording = sd.rec(
                 frames=num_frames,
                 samplerate=self.sample_rate,
-                channels=1,          # mono is enough for STT
+                channels=1,
                 dtype="float32",
                 device=self.input_device,
             )
-
-            # Wait until recording is finished
             sd.wait()
 
         except Exception as e:
-            # In a real app, you might want to log this and show an error in the UI
             raise RuntimeError(f"Error while recording audio: {e}")
 
-        # recording shape is (num_frames, 1) → flatten to (num_frames,)
         audio_mono: np.ndarray = recording.flatten()
-
         return audio_mono, self.sample_rate
+
+    # ---------- Continuous Recording ----------
+
+    def start_recording(self):
+        """Start continuous recording in background thread"""
+        self.is_recording = True
+        self.recording_thread = threading.Thread(target=self._record_loop, daemon=True)
+        self.recording_thread.start()
+        print("🎤 Continuous recording started...")
+
+    def stop_recording(self):
+        """Stop continuous recording"""
+        self.is_recording = False
+        if self.recording_thread:
+            self.recording_thread.join(timeout=5)
+        print("⏹️ Recording stopped!")
+
+    def _record_loop(self):
+        """Background thread that continuously records audio chunks"""
+        while self.is_recording:
+            try:
+                # Get audio chunk
+                audio_data, sr = self.get_audio_chunk()
+                
+                # Save to file
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+                filename = self.output_dir / f"chunk_{timestamp}.wav"
+                
+                self._save_wav(filename, audio_data, sr)
+                self.latest_file = filename
+                
+            except Exception as e:
+                print(f"❌ Error in recording loop: {e}")
+                break
+
+    def _save_wav(self, filename: Path, audio_data: np.ndarray, sample_rate: int):
+        """Save audio data to WAV file"""
+        # Convert float32 [-1, 1] to int16
+        audio_int16 = (audio_data * 32767).astype(np.int16)
+        
+        with wave.open(str(filename), 'wb') as wf:
+            wf.setnchannels(1)  # mono
+            wf.setsampwidth(2)  # 16-bit
+            wf.setframerate(sample_rate)
+            wf.writeframes(audio_int16.tobytes())
+
+    def get_latest_recording(self) -> Optional[Path]:
+        """Get the path to the most recent recording file"""
+        return self.latest_file
+
+    def clear_recordings(self):
+        """Clear all recording files"""
+        for file in self.output_dir.glob("chunk_*.wav"):
+            try:
+                file.unlink()
+            except:
+                pass
+        print("🗑️ Cleared all recordings")
 
 
 # ---------- Manual Test ----------
@@ -97,15 +158,6 @@ class AudioManager:
 if __name__ == "__main__":
     """
     Simple test script to verify that your microphone and AudioManager work.
-
-    Run:
-        python audio_manager.py
-
-    It will:
-    - Print available input devices
-    - Wait for Enter
-    - Record one chunk
-    - Print basic info
     """
     print("Initializing AudioManager...")
     am = AudioManager()

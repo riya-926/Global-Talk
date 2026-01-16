@@ -1,12 +1,15 @@
-.modal-overlay {
+.save-dialog-overlay {
     position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    backdrop-filter: blur(4px);
     animation: fadeIn 0.2s ease-out;
 }
 
@@ -15,96 +18,106 @@
     to { opacity: 1; }
 }
 
-.modal {
-    background: rgba(15, 23, 42, 0.95);
-    border: 1px solid rgba(59, 130, 246, 0.3);
-    border-radius: 16px;
-    padding: 32px;
-    max-width: 500px;
+.save-dialog {
+    background: linear-gradient(135deg, rgba(20, 30, 60, 0.98) 0%, rgba(30, 40, 70, 0.98) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(78, 168, 222, 0.2);
+    border-radius: 20px;
+    padding: 2.5rem 2.5rem 2rem 2.5rem;
     width: 90%;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    max-width: 580px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
     animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(40px) scale(0.95);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 
-.modal h3 {
-    font-size: 24px;
-    margin-bottom: 12px;
+.save-dialog-title {
+    font-size: 2rem;
+    font-weight: 700;
     color: white;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px;
 }
 
-.modal p {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 24px;
+.save-dialog-subtitle {
+    font-size: 1.05rem;
+    color: rgba(184, 197, 214, 0.8);
+    margin-bottom: 2.5rem;
+    line-height: 1.5;
 }
 
-.modal input {
+.save-dialog-input {
     width: 100%;
-    padding: 14px 16px;
-    background: rgba(59, 130, 246, 0.1);
-    border: 1px solid rgba(59, 130, 246, 0.3);
-    border-radius: 10px;
+    background: rgba(10, 20, 45, 0.8);
+    border: 2px solid rgba(78, 168, 222, 0.3);
+    border-radius: 12px;
+    padding: 1.1rem 1.5rem;
+    font-size: 1.05rem;
     color: white;
-    font-size: 16px;
-    margin-bottom: 24px;
-    transition: all 0.2s;
+    margin-bottom: 2.5rem;
+    transition: all 0.3s;
     font-family: inherit;
 }
 
-.modal input:focus {
+.save-dialog-input::placeholder {
+    color: rgba(184, 197, 214, 0.45);
+}
+
+.save-dialog-input:focus {
     outline: none;
-    border-color: rgba(59, 130, 246, 0.6);
-    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(78, 168, 222, 0.7);
+    background: rgba(10, 20, 45, 0.95);
+    box-shadow: 0 0 0 4px rgba(78, 168, 222, 0.1);
 }
 
-.modal input::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.modal-buttons {
+.save-dialog-buttons {
     display: flex;
-    gap: 12px;
+    gap: 1rem;
     justify-content: flex-end;
 }
 
-.modal-buttons button {
-    padding: 12px 28px;
-    border-radius: 10px;
-    font-size: 14px;
+.discard-btn,
+.save-btn {
+    padding: 0.95rem 2.2rem;
+    border-radius: 12px;
+    font-size: 1.05rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
-    border: 1px solid transparent;
+    transition: all 0.3s;
+    border: none;
+    letter-spacing: 0.3px;
     font-family: inherit;
 }
 
-.modal-buttons button:first-child {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+.discard-btn {
+    background: rgba(50, 60, 80, 0.6);
+    color: rgba(184, 197, 214, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.discard-btn:hover {
+    background: rgba(60, 70, 90, 0.8);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.save-btn {
+    background: linear-gradient(135deg, #4ea8de 0%, #5c9ead 100%);
     color: white;
+    box-shadow: 0 4px 15px rgba(78, 168, 222, 0.35);
 }
 
-.modal-buttons button:first-child:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.modal-buttons button.primary {
-    background: #3b82f6;
-    color: white;
-}
-
-.modal-buttons button.primary:hover {
-    background: #2563eb;
+.save-btn:hover {
     transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(78, 168, 222, 0.5);
 }
