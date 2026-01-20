@@ -108,7 +108,7 @@ if __name__ == "__main__":
     tm = TranslationModule()
 
     print("=== TranslationModule Test ===")
-    src = input("Source language (e.g., 'spanish', 'fr', 'urdu', or leave blank): ").strip()
+    src = input("Source language: ").strip()
     if src == "":
         src = None
 

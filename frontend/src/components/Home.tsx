@@ -46,10 +46,12 @@ export const Home: React.FC<HomeProps> = ({
                 <span></span>
             </button>
 
-            {/* ADDED: Background blur circles from builder.io */}
+            {/* Enhanced background blur circles with more purple/blue/turquoise */}
             <div className="background-blurs">
                 <div className="blur-circle blur-cyan"></div>
                 <div className="blur-circle blur-purple"></div>
+                <div className="blur-circle"></div>
+                <div className="blur-circle"></div>
             </div>
 
             <div className="home-center">

@@ -66,7 +66,7 @@ body.sidebar-hidden .home-screen {
     }
 }
 
-/* ADDED: Background blur effects from builder.io */
+/* ADDED: Background blur effects with MORE purple/blue/turquoise */
 .background-blurs {
     position: absolute;
     inset: 0;
@@ -77,22 +77,39 @@ body.sidebar-hidden .home-screen {
 
 .blur-circle {
     position: absolute;
-    width: 384px;
-    height: 384px;
+    width: 500px;
+    height: 500px;
     border-radius: 9999px;
-    filter: blur(96px);
+    filter: blur(120px);
 }
 
 .blur-cyan {
     top: 5rem;
     right: 5rem;
-    background-color: rgba(6, 182, 212, 0.2);
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.4) 0%, rgba(34, 211, 238, 0.2) 50%, transparent 100%);
 }
 
 .blur-purple {
     bottom: 5rem;
     left: 5rem;
-    background-color: rgba(168, 85, 247, 0.2);
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(147, 51, 234, 0.2) 50%, transparent 100%);
+}
+
+/* Additional blur circles for more color */
+.blur-circle:nth-child(3) {
+    top: 50%;
+    left: 30%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(96, 165, 250, 0.15) 50%, transparent 100%);
+}
+
+.blur-circle:nth-child(4) {
+    bottom: 20%;
+    right: 25%;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.35) 0%, rgba(6, 182, 212, 0.18) 50%, transparent 100%);
 }
 
 .home-center {
@@ -358,7 +375,6 @@ body.sidebar-hidden .home-screen {
     color: white;
     font-weight: 700;
 }
-
 
 /* Scrollbar for help popup */
 .help-popup::-webkit-scrollbar {

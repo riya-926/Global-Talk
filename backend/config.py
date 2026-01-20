@@ -57,9 +57,9 @@ def validate_config():
 
     if missing:
         msg = (
-            "❌ Missing required configuration:\n" +
+            "Missing required configuration:\n" +
             "\n".join(f" - {m}" for m in missing) +
-            "\n\n📝 Create a .env file with:\n"
+            "\n\nCreate a .env file with:\n"
             "OPENAI_API_KEY=your-key-here\n\n"
             "Or set as environment variable."
         )
