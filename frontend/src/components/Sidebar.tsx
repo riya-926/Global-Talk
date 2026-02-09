@@ -88,8 +88,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                         e.stopPropagation();
                                         onDeleteChat(chat.id);
                                     }}
+                                    title="Delete chat"
                                 >
-                                    🗑️
+                                    ✕
                                 </button>
                             </div>
                         ))
