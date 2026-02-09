@@ -56,11 +56,11 @@ body.sidebar-hidden .home-screen {
 
 @media (max-width: 1200px) {
     .home-screen {
-        margin-left: 280px;
+        margin-left: 350px;
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
     .home-screen {
         margin-left: 0;
     }
@@ -124,9 +124,34 @@ body.sidebar-hidden .home-screen {
     margin-right: clamp(50px, 15vw, 350px);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
     .home-center {
         margin-right: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .home-center {
+        padding: 1rem;
+    }
+    
+    .title-large {
+        font-size: 4rem;
+    }
+    
+    .subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .start-btn {
+        padding: 1.2rem 2rem;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .language-selector select {
+        min-width: 100%;
     }
 }
 

@@ -130,6 +130,7 @@ function AppContent() {
 
     // ONLY show globe on homepage (not recording and no messages)
     const showGlobe = !isRecording && messages.length === 0;
+    const isHomepage = showGlobe;
 
     // Show auth if not logged in
     if (!currentUser) {
@@ -146,7 +147,8 @@ function AppContent() {
 
     return (
         <div className="app">
-            {/* Logout button */}
+            {/* Logout button - only on homepage */}
+            {isHomepage && (
             <button
                 onClick={logout}
                 className="logout-button"
@@ -158,17 +160,19 @@ function AppContent() {
                     <line x1="21" y1="12" x2="9" y2="12"></line>
                 </svg>
             </button>
+            )}
 
-            {/* Globe ONLY shows on homepage */}
-            {showGlobe && <CornerGlobe />}
+            {/* Globe ONLY shows on homepage - hidden on narrow/split-screen */}
+            {showGlobe && (
+                <div className="corner-globe-container">
+                    <CornerGlobe />
+                </div>
+            )}
 
             {/* Hamburger menu button for small screens */}
             <button
                 className="hamburger-menu"
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                style={{
-                    display: window.innerWidth <= 900 ? 'flex' : 'none'
-                }}
             >
                 ☰
             </button>
