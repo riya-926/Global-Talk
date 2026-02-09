@@ -104,9 +104,34 @@ body.sidebar-hidden .sidebar {
     }
 }
 
-.new-chat-button {
-    /* REMOVED - hiding this element */
-    display: none;
+.sidebar-home-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: calc(100% - 4rem);
+    margin: 1rem 2rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(34, 211, 238, 0.15) 100%);
+    border: 1px solid rgba(78, 168, 222, 0.4);
+    border-radius: 12px;
+    color: #06b6d4;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sidebar-home-button:hover {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.3) 0%, rgba(34, 211, 238, 0.25) 100%);
+    border-color: rgba(78, 168, 222, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);
+}
+
+.sidebar-home-button svg {
+    flex-shrink: 0;
 }
 
 .chat-list {

@@ -59,7 +59,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <button className="close-button" onClick={onClose}>✕</button>
                 </div>
 
-                {/* REMOVED: New Chat button */}
+                <button className="sidebar-home-button" onClick={() => { onNewChat(); onClose(); }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    Home
+                </button>
 
                 <div className="chat-list">
                     {savedChats.length === 0 ? (
