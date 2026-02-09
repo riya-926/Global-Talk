@@ -8,6 +8,8 @@ interface LandingPageProps {
 export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
     return (
         <div className="landing-page">
+            {/* Fixed background - stays stable, no movement */}
+            <div className="landing-bg-fixed" />
             {/* Background effects */}
             <div className="landing-bg-gradient" />
             <div className="landing-glow-line" />
@@ -15,7 +17,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
                 <div className="landing-blur landing-blur-1" />
                 <div className="landing-blur landing-blur-2" />
             </div>
-            {/* Floating white/light shooting-star specs */}
+            {/* Floating white/light shooting-star specs - more stars, twinkle effect */}
             <div className="landing-shooting-stars" aria-hidden="true">
                 <div className="landing-star landing-star-1" />
                 <div className="landing-star landing-star-2" />
@@ -23,6 +25,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
                 <div className="landing-star landing-star-4" />
                 <div className="landing-star landing-star-5" />
                 <div className="landing-star landing-star-6" />
+                <div className="landing-star landing-star-7" />
+                <div className="landing-star landing-star-8" />
                 <div className="landing-speck landing-speck-1" />
                 <div className="landing-speck landing-speck-2" />
                 <div className="landing-speck landing-speck-3" />
@@ -30,6 +34,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
                 <div className="landing-speck landing-speck-5" />
                 <div className="landing-speck landing-speck-6" />
                 <div className="landing-speck landing-speck-7" />
+                <div className="landing-speck landing-speck-8" />
+                <div className="landing-speck landing-speck-9" />
+                <div className="landing-speck landing-speck-10" />
             </div>
 
             {/* Header */}

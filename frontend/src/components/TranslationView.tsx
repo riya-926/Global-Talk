@@ -28,13 +28,12 @@ export const TranslationView: React.FC<TranslationViewProps> = ({
 
                 {!isRecording && onBackToHome && (
                     <button className="back-home-btn" onClick={onBackToHome}>
-                        ← Back to Home
+                        Back to Home
                     </button>
                 )}
 
                 {isRecording && (
                     <div className="recording-badge">
-                        <span className="mic-icon">🎤</span>
                         <span>RECORDING</span>
                         <span className="pulse-dot"></span>
                     </div>
@@ -42,7 +41,7 @@ export const TranslationView: React.FC<TranslationViewProps> = ({
 
                 {isRecording && (
                     <button className="end-btn" onClick={onStopRecording}>
-                        ✕ End Meeting
+                        End Meeting
                     </button>
                 )}
             </header>
@@ -53,7 +52,7 @@ export const TranslationView: React.FC<TranslationViewProps> = ({
                 <div className="transcript-area">
                     {messages.length === 0 ? (
                         <div className="empty-state">
-                            🎤 Start speaking to see translations appear here...
+                            Start speaking to see translations appear here...
                         </div>
                     ) : (
                         messages.map((msg, index) => (

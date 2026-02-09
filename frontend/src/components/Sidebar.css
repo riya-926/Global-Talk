@@ -57,8 +57,17 @@ body.sidebar-hidden .sidebar {
     }
 }
 
+.sidebar-welcome {
+    padding: 1.5rem 2.5rem 0.75rem;
+    padding-left: 4.5rem;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
 .sidebar-header {
-    padding: 2rem 2.5rem; /* BIGGER padding */
+    padding: 1rem 2.5rem;
     border-bottom: 1px solid rgba(78, 168, 222, 0.2);
     display: flex;
     align-items: center;
@@ -71,15 +80,11 @@ body.sidebar-hidden .sidebar {
     gap: 1rem;
 }
 
-.header-content .icon {
-    font-size: 1.8rem; /* BIGGER icon */
-}
-
 .sidebar-header h3 {
-    font-size: 1.2rem; /* BIGGER text */
-    font-weight: 800;
-    letter-spacing: 2.5px;
-    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.9);
     text-transform: uppercase;
 }
 
@@ -103,8 +108,14 @@ body.sidebar-hidden .sidebar {
         display: block;
     }
     
+    .sidebar-welcome {
+        padding: 1.25rem 1.5rem 0.5rem;
+        padding-left: 4rem;
+        font-size: 1.15rem;
+    }
+    
     .sidebar-header {
-        padding: 1.5rem 1.5rem;
+        padding: 1rem 1.5rem;
     }
     
     .sidebar-home-button {
@@ -189,11 +200,6 @@ body.sidebar-hidden .sidebar {
     border-color: rgba(78, 168, 222, 0.4);
     transform: translateX(4px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.chat-icon {
-    font-size: 1.8rem; /* BIGGER icon */
-    flex-shrink: 0;
 }
 
 .chat-info {

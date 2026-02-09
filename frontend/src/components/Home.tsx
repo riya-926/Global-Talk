@@ -39,20 +39,22 @@ export const Home: React.FC<HomeProps> = ({
 
     return (
         <div className="home-screen">
+            {/* Fixed background - stays stationary, no scroll/drag */}
+            <div className="home-screen-bg-fixed">
+                <div className="background-blurs">
+                    <div className="blur-circle blur-cyan"></div>
+                    <div className="blur-circle blur-purple"></div>
+                    <div className="blur-circle"></div>
+                    <div className="blur-circle"></div>
+                </div>
+            </div>
+
             {/* Hamburger menu button */}
             <button className="sidebar-toggle-btn" onClick={toggleSidebar}>
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
-
-            {/* Enhanced background blur circles with more purple/blue/turquoise */}
-            <div className="background-blurs">
-                <div className="blur-circle blur-cyan"></div>
-                <div className="blur-circle blur-purple"></div>
-                <div className="blur-circle"></div>
-                <div className="blur-circle"></div>
-            </div>
 
             <div className="home-center">
                 <h1 className="title-large">
@@ -65,7 +67,6 @@ export const Home: React.FC<HomeProps> = ({
                 </p>
 
                 <button className="start-btn" onClick={onStartRecording}>
-                    <span className="globe-icon">🌐</span>
                     Start Meeting with Globe
                 </button>
 
@@ -93,7 +94,7 @@ export const Home: React.FC<HomeProps> = ({
             {showHelp && (
                 <div className="help-overlay" onClick={() => setShowHelp(false)}>
                     <div className="help-popup" onClick={(e) => e.stopPropagation()}>
-                        <button className="help-close" onClick={() => setShowHelp(false)}>✕</button>
+                        <button className="help-close" onClick={() => setShowHelp(false)}>×</button>
                         <h2>How to Use Global Chat</h2>
                         <div className="help-content">
                             <div className="help-step">

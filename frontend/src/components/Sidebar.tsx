@@ -10,6 +10,7 @@ interface SidebarProps {
     onDeleteChat: (chatId: string) => void;
     onNewChat: () => void;
     onRenameChat: (chatId: string, newName: string) => void;
+    userName?: string;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -20,6 +21,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                                     onDeleteChat,
                                                     onNewChat,
                                                     onRenameChat,
+                                                    userName,
                                                 }) => {
     const [sidebarVisible, setSidebarVisible] = React.useState(true);
 
@@ -51,12 +53,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             <div className={`sidebar-overlay ${isOpen ? 'open' : ''}`} onClick={onClose}></div>
             <aside className={`sidebar ${!sidebarVisible ? 'hidden' : ''} ${isOpen ? 'open' : ''}`}>
+                <div className="sidebar-welcome">
+                    Welcome, {userName || 'User'}
+                </div>
                 <div className="sidebar-header">
                     <div className="header-content">
-                        <span className="icon">🕐</span>
                         <h3>PREVIOUS CHAT</h3>
                     </div>
-                    <button className="close-button" onClick={onClose}>✕</button>
+                    <button className="close-button" onClick={onClose}>×</button>
                 </div>
 
                 <button className="sidebar-home-button" onClick={() => { onNewChat(); onClose(); }}>
@@ -77,7 +81,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 className="chat-item"
                                 onClick={() => onLoadChat(chat)}
                             >
-                                <span className="chat-icon">💬</span>
                                 <div className="chat-info">
                                     <p className="chat-name">{chat.name}</p>
                                     <p className="chat-date">{formatDate(chat.timestamp)}</p>
@@ -90,7 +93,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                     }}
                                     title="Delete chat"
                                 >
-                                    ✕
+                                    ×
                                 </button>
                             </div>
                         ))

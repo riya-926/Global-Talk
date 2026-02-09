@@ -49,12 +49,25 @@ export const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onBackToLanding 
         <div className="auth-container">
             {onBackToLanding && (
                 <button type="button" className="auth-back-link" onClick={onBackToLanding}>
-                    ← Back
+                    Back
                 </button>
             )}
             <div className="auth-background-blurs">
                 <div className="auth-blur-circle auth-blur-cyan"></div>
                 <div className="auth-blur-circle auth-blur-purple"></div>
+                <div className="auth-blur-circle auth-blur-blue"></div>
+                <div className="auth-blur-circle auth-blur-violet"></div>
+                <div className="auth-blur-circle auth-blur-indigo"></div>
+                <div className="auth-speck auth-speck-1"></div>
+                <div className="auth-speck auth-speck-2"></div>
+                <div className="auth-speck auth-speck-3"></div>
+                <div className="auth-speck auth-speck-4"></div>
+                <div className="auth-speck auth-speck-5"></div>
+                <div className="auth-speck auth-speck-6"></div>
+                <div className="auth-speck auth-speck-7"></div>
+                <div className="auth-speck auth-speck-8"></div>
+                <div className="auth-speck auth-speck-9"></div>
+                <div className="auth-speck auth-speck-10"></div>
             </div>
 
             <div className="auth-card">

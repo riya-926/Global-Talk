@@ -60,7 +60,7 @@ export const Signup: React.FC<SignupProps> = ({ onSwitchToLogin, onBackToLanding
         <div className="auth-container">
             {onBackToLanding && (
                 <button type="button" className="auth-back-link" onClick={onBackToLanding}>
-                    ← Back
+                    Back
                 </button>
             )}
             <div className="auth-background-blurs">

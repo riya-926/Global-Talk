@@ -195,6 +195,7 @@ function AppContent() {
                 onDeleteChat={handleDeleteChat}
                 onNewChat={handleNewChat}
                 onRenameChat={handleRenameChat}
+                userName={currentUser?.displayName || currentUser?.email?.split('@')[0] || 'User'}
             />
 
             <div className="main-content">
