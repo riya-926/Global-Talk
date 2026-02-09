@@ -70,6 +70,191 @@
     background: radial-gradient(circle, rgba(6, 182, 212, 0.4) 0%, transparent 70%);
 }
 
+/* Shooting stars - diagonal streaks */
+.landing-shooting-stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.landing-star {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.9) 30%,
+        rgba(200, 180, 255, 0.8) 60%,
+        rgba(168, 85, 247, 0.4) 100%
+    );
+    transform-origin: right center;
+    filter: blur(0.5px);
+}
+
+.landing-star-1 {
+    --star-rotate: -25deg;
+    width: 120px;
+    top: 15%;
+    left: 10%;
+    animation: landing-shooting-star 8s ease-in-out infinite;
+}
+
+.landing-star-2 {
+    --star-rotate: -35deg;
+    width: 80px;
+    top: 30%;
+    left: 80%;
+    animation: landing-shooting-star 10s ease-in-out infinite;
+    animation-delay: -3s;
+}
+
+.landing-star-3 {
+    --star-rotate: -20deg;
+    width: 100px;
+    top: 55%;
+    left: 5%;
+    animation: landing-shooting-star 12s ease-in-out infinite;
+    animation-delay: -5s;
+}
+
+.landing-star-4 {
+    --star-rotate: -40deg;
+    width: 90px;
+    top: 70%;
+    left: 60%;
+    animation: landing-shooting-star 9s ease-in-out infinite;
+    animation-delay: -2s;
+}
+
+.landing-star-5 {
+    --star-rotate: -30deg;
+    width: 70px;
+    top: 25%;
+    left: 50%;
+    animation: landing-shooting-star 11s ease-in-out infinite;
+    animation-delay: -7s;
+}
+
+.landing-star-6 {
+    --star-rotate: -15deg;
+    width: 110px;
+    top: 80%;
+    left: 25%;
+    animation: landing-shooting-star 7s ease-in-out infinite;
+    animation-delay: -4s;
+}
+
+@keyframes landing-shooting-star {
+    0% {
+        opacity: 0;
+        transform: translateX(-100px) rotate(var(--star-rotate, -25deg)) scaleX(0.3);
+    }
+    10% {
+        opacity: 0.9;
+    }
+    30% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 0.2;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100vw) rotate(var(--star-rotate, -25deg)) scaleX(1);
+    }
+}
+
+/* Floating white/colored specks */
+.landing-speck {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(200, 180, 255, 0.4) 50%,
+        transparent 100%
+    );
+    filter: blur(8px);
+    animation: landing-speck-float 14s ease-in-out infinite;
+}
+
+.landing-speck-1 {
+    width: 12px;
+    height: 12px;
+    top: 20%;
+    left: 15%;
+    animation-delay: 0s;
+}
+
+.landing-speck-2 {
+    width: 8px;
+    height: 8px;
+    top: 40%;
+    right: 20%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(96, 165, 250, 0.3) 50%, transparent 100%);
+    animation-delay: -2s;
+}
+
+.landing-speck-3 {
+    width: 14px;
+    height: 14px;
+    bottom: 35%;
+    left: 8%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(168, 85, 247, 0.35) 50%, transparent 100%);
+    animation-delay: -5s;
+}
+
+.landing-speck-4 {
+    width: 10px;
+    height: 10px;
+    bottom: 25%;
+    right: 12%;
+    animation-delay: -3s;
+}
+
+.landing-speck-5 {
+    width: 6px;
+    height: 6px;
+    top: 60%;
+    left: 45%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(34, 211, 238, 0.3) 50%, transparent 100%);
+    animation-delay: -7s;
+}
+
+.landing-speck-6 {
+    width: 16px;
+    height: 16px;
+    top: 10%;
+    right: 35%;
+    animation-delay: -4s;
+}
+
+.landing-speck-7 {
+    width: 9px;
+    height: 9px;
+    bottom: 15%;
+    left: 60%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0%, rgba(139, 92, 246, 0.35) 50%, transparent 100%);
+    animation-delay: -6s;
+}
+
+@keyframes landing-speck-float {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.7;
+    }
+    33% {
+        transform: translate(25px, -35px) scale(1.2);
+        opacity: 1;
+    }
+    66% {
+        transform: translate(-20px, 25px) scale(0.9);
+        opacity: 0.8;
+    }
+}
+
 /* Header */
 .landing-header {
     position: relative;
@@ -162,7 +347,7 @@
 }
 
 .landing-hero-title {
-    font-size: 3.5rem;
+    font-size: clamp(2rem, 5vw, 4rem);
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1.5rem;
@@ -236,7 +421,7 @@
 }
 
 .landing-section-title {
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 3.5vw, 3rem);
     font-weight: 800;
     text-align: center;
     margin-bottom: 0.75rem;
@@ -447,7 +632,7 @@
     font-size: 0.9rem;
 }
 
-/* Full screen: add decorative hero visual on right */
+/* Full screen: add decorative hero visual, scale up content */
 @media (min-width: 1200px) {
     .landing-hero-visual {
         display: flex;
@@ -465,6 +650,103 @@
         background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
         border-radius: 50%;
         filter: blur(40px);
+    }
+
+    .landing-hero-title {
+        font-size: 4rem;
+    }
+
+    .landing-hero-desc {
+        font-size: 1.3rem;
+    }
+
+    .landing-section-title {
+        font-size: 3rem;
+    }
+
+    .landing-section-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .landing-features-grid {
+        max-width: min(1320px, 95vw);
+        gap: 2rem;
+    }
+
+    .landing-feature-card {
+        padding: 2.5rem;
+    }
+
+    .landing-feature-card h3 {
+        font-size: 1.25rem;
+    }
+
+    .landing-feature-card p {
+        font-size: 1rem;
+    }
+
+    .landing-feature-icon {
+        width: 64px;
+        height: 64px;
+    }
+
+    .landing-icon-svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .landing-steps {
+        max-width: min(1280px, 95vw);
+        gap: 3.5rem;
+    }
+
+    .landing-step-num {
+        width: 72px;
+        height: 72px;
+        font-size: 2rem;
+    }
+
+    .landing-step h3 {
+        font-size: 1.35rem;
+    }
+
+    .landing-step p {
+        font-size: 1rem;
+    }
+
+    .landing-cta-card {
+        max-width: min(900px, 90vw);
+        padding: 5rem;
+    }
+
+    .landing-cta-card h2 {
+        font-size: 2.75rem;
+    }
+
+    .landing-cta-card p {
+        font-size: 1.2rem;
+    }
+}
+
+@media (min-width: 1600px) {
+    .landing-hero-title {
+        font-size: 4.5rem;
+    }
+
+    .landing-hero-desc {
+        font-size: 1.35rem;
+    }
+
+    .landing-section-title {
+        font-size: 3.25rem;
+    }
+
+    .landing-features-grid {
+        max-width: 1400px;
+    }
+
+    .landing-cta-card h2 {
+        font-size: 3rem;
     }
 }
 

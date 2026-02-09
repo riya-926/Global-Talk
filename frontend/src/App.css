@@ -110,6 +110,13 @@ body {
     z-index: 1;
 }
 
+/* Split screen / medium width: shift globe left so it stays visually centered */
+@media (min-width: 1101px) and (max-width: 1500px) {
+    .corner-globe {
+        right: -150px !important;
+    }
+}
+
 @media (max-width: 1100px) {
     .corner-globe-container {
         display: none;

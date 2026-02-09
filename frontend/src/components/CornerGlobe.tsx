@@ -247,6 +247,7 @@ export default function CornerGlobe() {
     return (
         <div
             ref={containerRef}
+            className="corner-globe"
             style={{
                 position: 'fixed',
                 width: '1400px',
