@@ -93,10 +93,11 @@
     font-size: 1.05rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
     letter-spacing: 0.3px;
     font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .discard-btn {
@@ -109,6 +110,12 @@
     background: rgba(60, 70, 90, 0.8);
     border-color: rgba(255, 255, 255, 0.15);
     transform: translateY(-1px);
+}
+
+.discard-btn:active,
+.save-btn:active {
+    transform: translateY(0) scale(0.98);
+    transition-duration: 0.1s;
 }
 
 .save-btn {

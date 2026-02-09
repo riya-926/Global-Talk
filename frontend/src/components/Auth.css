@@ -1,3 +1,24 @@
+/* Back to landing link */
+.auth-back-link {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.auth-back-link:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
 /* Auth Container - matches Builder.io style */
 .auth-container {
     display: flex;
@@ -46,20 +67,20 @@
     backdrop-filter: blur(20px);
     border: 2px solid rgba(6, 182, 212, 0.3);
     border-radius: 24px;
-    padding: 3rem;
+    padding: 4rem;
     width: 100%;
-    max-width: 450px;
+    max-width: 560px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 /* Auth Header */
 .auth-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .auth-title {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: 700;
     background: linear-gradient(135deg, #06b6d4, #a855f7);
     -webkit-background-clip: text;
@@ -71,7 +92,7 @@
 
 .auth-subtitle {
     color: rgba(255, 255, 255, 0.7);
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 400;
 }
 
@@ -80,10 +101,10 @@
     background: rgba(239, 68, 68, 0.2);
     border: 1px solid rgba(239, 68, 68, 0.5);
     color: #fca5a5;
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.25rem;
     border-radius: 12px;
     margin-bottom: 1.5rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
     text-align: center;
 }
 
@@ -91,29 +112,29 @@
 .auth-form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.75rem;
 }
 
 .auth-input-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
 }
 
 .auth-input-group label {
     color: rgba(255, 255, 255, 0.9);
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 500;
 }
 
 .auth-input {
     width: 100%;
-    padding: 0.875rem 1.25rem;
+    padding: 1rem 1.5rem;
     background: rgba(15, 23, 42, 0.8);
     border: 2px solid rgba(6, 182, 212, 0.2);
     border-radius: 12px;
     color: white;
-    font-size: 1rem;
+    font-size: 1.1rem;
     transition: all 0.3s ease;
     outline: none;
 }
@@ -136,10 +157,10 @@
 /* Auth Buttons */
 .auth-button {
     width: 100%;
-    padding: 0.875rem 1.5rem;
+    padding: 1.1rem 1.5rem;
     border: none;
     border-radius: 12px;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -186,8 +207,8 @@
 }
 
 .google-icon {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 }
 
 /* Divider */
@@ -195,9 +216,9 @@
     display: flex;
     align-items: center;
     text-align: center;
-    margin: 1.5rem 0;
+    margin: 2rem 0;
     color: rgba(255, 255, 255, 0.5);
-    font-size: 0.875rem;
+    font-size: 1rem;
 }
 
 .auth-divider::before,
@@ -214,9 +235,9 @@
 /* Auth Footer */
 .auth-footer {
     text-align: center;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
+    font-size: 1.05rem;
 }
 
 .auth-link {
@@ -237,12 +258,12 @@
 /* Responsive */
 @media (max-width: 600px) {
     .auth-card {
-        padding: 2rem 1.5rem;
+        padding: 2.5rem 1.75rem;
         margin: 1rem;
         max-width: 100%;
     }
 
     .auth-title {
-        font-size: 2rem;
+        font-size: 2.25rem;
     }
 }

@@ -3,6 +3,7 @@ import { Home } from './components/Home';
 import { TranslationView } from './components/TranslationView';
 import { Sidebar } from './components/Sidebar';
 import { SaveDialog } from './components/SaveDialog';
+import { LandingPage } from './components/LandingPage';
 import { Login } from './components/Login';
 import { Signup } from './components/Signup';
 import CornerGlobe from './components/CornerGlobe';
@@ -132,14 +133,23 @@ function AppContent() {
     const showGlobe = !isRecording && messages.length === 0;
     const isHomepage = showGlobe;
 
-    // Show auth if not logged in
+    // Show landing, login, or signup if not logged in
     if (!currentUser) {
+        if (showAuth === null) {
+            return <LandingPage onGetStarted={() => setShowAuth('login')} />;
+        }
         return (
             <>
-                {showAuth === 'login' || showAuth === null ? (
-                    <Login onSwitchToSignup={() => setShowAuth('signup')} />
+                {showAuth === 'login' ? (
+                    <Login
+                        onSwitchToSignup={() => setShowAuth('signup')}
+                        onBackToLanding={() => setShowAuth(null)}
+                    />
                 ) : (
-                    <Signup onSwitchToLogin={() => setShowAuth('login')} />
+                    <Signup
+                        onSwitchToLogin={() => setShowAuth('login')}
+                        onBackToLanding={() => setShowAuth(null)}
+                    />
                 )}
             </>
         );

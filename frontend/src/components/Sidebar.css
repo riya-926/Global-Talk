@@ -133,7 +133,9 @@ body.sidebar-hidden .sidebar {
     font-weight: 600;
     letter-spacing: 0.5px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 .sidebar-home-button:hover {
@@ -141,6 +143,11 @@ body.sidebar-hidden .sidebar {
     border-color: rgba(78, 168, 222, 0.6);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);
+}
+
+.sidebar-home-button:active {
+    transform: translateY(0) scale(0.98);
+    transition-duration: 0.1s;
 }
 
 .sidebar-home-button svg {
@@ -166,14 +173,15 @@ body.sidebar-hidden .sidebar {
 .chat-item {
     display: flex;
     align-items: flex-start;
-    gap: 1.2rem; /* BIGGER gap */
-    padding: 1.5rem; /* BIGGER padding */
+    gap: 1.2rem;
+    padding: 1.5rem;
     background: rgba(30, 40, 70, 0.4);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(78, 168, 222, 0.15);
     border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .chat-item:hover {
@@ -219,13 +227,18 @@ body.sidebar-hidden .sidebar {
 .delete-btn {
     background: none;
     border: none;
-    font-size: 1.6rem; /* BIGGER */
+    font-size: 1.6rem;
     color: white;
     cursor: pointer;
     opacity: 0;
-    transition: all 0.2s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 0.25rem;
     flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.delete-btn:active {
+    transform: scale(0.9);
 }
 
 .chat-item:hover .delete-btn {

@@ -4,9 +4,10 @@ import './Auth.css';
 
 interface SignupProps {
     onSwitchToLogin: () => void;
+    onBackToLanding?: () => void;
 }
 
-export const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
+export const Signup: React.FC<SignupProps> = ({ onSwitchToLogin, onBackToLanding }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -57,6 +58,11 @@ export const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
 
     return (
         <div className="auth-container">
+            {onBackToLanding && (
+                <button type="button" className="auth-back-link" onClick={onBackToLanding}>
+                    ← Back
+                </button>
+            )}
             <div className="auth-background-blurs">
                 <div className="auth-blur-circle auth-blur-cyan"></div>
                 <div className="auth-blur-circle auth-blur-purple"></div>

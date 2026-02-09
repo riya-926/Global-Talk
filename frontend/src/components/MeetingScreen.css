@@ -24,18 +24,19 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
+    gap: 1.25rem;
+    padding: 1.25rem 2rem;
     background: rgba(10, 14, 39, 0.6);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(78, 168, 222, 0.1);
     position: sticky;
     top: 0;
     z-index: 50;
+    transition: padding 0.3s ease;
 }
 
 .header-title h2 {
-    font-size: 1.2rem;
+    font-size: 1.35rem;
     font-weight: 900;
     line-height: 1.2;
     letter-spacing: 2px;
@@ -46,30 +47,30 @@
 .recording-badge {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    background: rgba(139, 69, 69, 0.25);
+    gap: 1rem;
+    background: rgba(139, 69, 69, 0.3);
     backdrop-filter: blur(10px);
-    padding: 0.7rem 1.8rem;
+    padding: 1rem 2.25rem;
     border-radius: 50px;
-    border: 1px solid rgba(220, 95, 95, 0.4);
-    font-weight: 600;
-    font-size: 0.95rem;
-    letter-spacing: 1.5px;
+    border: 2px solid rgba(220, 95, 95, 0.5);
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: 2px;
     text-transform: uppercase;
     color: #ff9999;
 }
 
 .mic-icon {
-    font-size: 1.1rem;
+    font-size: 1.4rem;
 }
 
 .pulse-dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     background: #ff4444;
     border-radius: 50%;
     animation: pulse 1.5s ease-in-out infinite;
-    box-shadow: 0 0 8px rgba(255, 68, 68, 0.8);
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
 }
 
 @keyframes pulse {
@@ -86,40 +87,55 @@
 .end-btn {
     background: rgba(30, 30, 50, 0.6);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.15);
     color: white;
-    padding: 0.7rem 1.5rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    border-radius: 8px;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s;
     letter-spacing: 0.5px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 .end-btn:hover {
     background: rgba(50, 50, 70, 0.8);
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.end-btn:active {
+    transform: translateY(0) scale(0.98);
+    transition-duration: 0.1s;
 }
 
 .back-home-btn {
     background: rgba(78, 168, 222, 0.15);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(78, 168, 222, 0.3);
+    border: 2px solid rgba(78, 168, 222, 0.35);
     color: white;
-    padding: 0.7rem 1.5rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    border-radius: 8px;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s;
     letter-spacing: 0.5px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 .back-home-btn:hover {
     background: rgba(78, 168, 222, 0.25);
     border-color: rgba(78, 168, 222, 0.5);
-    transform: translateX(-2px);
+    transform: translateX(-3px) translateY(-1px);
+}
+
+.back-home-btn:active {
+    transform: translateX(-2px) scale(0.98);
+    transition-duration: 0.1s;
 }
 
 .meeting-content {

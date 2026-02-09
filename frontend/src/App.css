@@ -49,12 +49,18 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .hamburger-menu:hover {
     background: rgba(78, 168, 222, 0.3);
     transform: scale(1.05);
+}
+
+.hamburger-menu:active {
+    transform: scale(0.97);
+    transition-duration: 0.1s;
 }
 
 @media (min-width: 1101px) {
@@ -80,7 +86,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .logout-button:hover {
@@ -88,6 +95,11 @@ body {
     border-color: rgba(6, 182, 212, 0.8);
     transform: scale(1.05);
     color: #22d3ee;
+}
+
+.logout-button:active {
+    transform: scale(0.97);
+    transition-duration: 0.1s;
 }
 
 /* Corner globe - hide on narrow/split-screen to prevent overlap */
