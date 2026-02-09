@@ -65,6 +65,6 @@ def validate_config():
         )
         raise RuntimeError(msg)
     
-    print("✅ Configuration validated!")
+    print("Configuration validated!")
     print(f"   Using model: {OPENAI_TRANSLATION_MODEL}")
     print(f"   Audio chunks: {AUDIO_CHUNK_SECONDS}s")

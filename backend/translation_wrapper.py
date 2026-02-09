@@ -55,7 +55,7 @@ def translate_text(text: str, target_language: str, source_language: str = None)
         }
 
     except Exception as e:
-        print(f"❌ Error translating text: {e}")
+        print(f"Error translating text: {e}")
         return {
             "translated_text": text  # Return original if translation fails
         }

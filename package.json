@@ -1,0 +1,14 @@
+{
+  "name": "global-talk",
+  "scripts": {
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "python api_server.py",
+    "frontend": "npm run dev --prefix frontend"
+  },
+  "dependencies": {
+    "firebase": "^12.8.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

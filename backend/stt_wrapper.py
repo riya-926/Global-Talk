@@ -40,7 +40,7 @@ def transcribe_audio(file_path: str | Path) -> dict:
         }
 
     except Exception as e:
-        print(f"❌ Error transcribing {file_path}: {e}")
+        print(f"Error transcribing {file_path}: {e}")
         return {
             "text": "",
             "language": "unknown"

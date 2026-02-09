@@ -202,14 +202,17 @@ export default function CornerGlobe() {
         scene.add(ambientLight);
 
         // CRITICAL: Make sure animation starts
-        let animationId: number;
+        let animationId: number | null = null;
         let rotationX = 0;
         let rotationY = 0;
+        let isAnimating = true;
 
         const animate = () => {
+            if (!isAnimating) return;
+            
             animationId = requestAnimationFrame(animate);
 
-            // Update rotations
+            // Update rotations continuously
             rotationX += 0.001;
             rotationY += 0.003;
 
@@ -219,18 +222,24 @@ export default function CornerGlobe() {
             renderer.render(scene, camera);
         };
 
-        // START ANIMATION IMMEDIATELY
-        animate();
-
-        console.log('Globe animation started!');
+        // START ANIMATION IMMEDIATELY - use setTimeout to ensure it starts after render
+        setTimeout(() => {
+            isAnimating = true;
+            animate();
+            console.log('Globe animation started!');
+        }, 0);
 
         return () => {
-            cancelAnimationFrame(animationId);
+            isAnimating = false;
+            if (animationId !== null) {
+                cancelAnimationFrame(animationId);
+            }
             if (containerRef.current && renderer.domElement.parentNode === containerRef.current) {
                 containerRef.current.removeChild(renderer.domElement);
             }
             geometry.dispose();
             material.dispose();
+            texture.dispose();
             renderer.dispose();
         };
     }, []);

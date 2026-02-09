@@ -101,14 +101,14 @@ class AudioManager:
         self.is_recording = True
         self.recording_thread = threading.Thread(target=self._record_loop, daemon=True)
         self.recording_thread.start()
-        print("🎤 Continuous recording started...")
+        print("Continuous recording started...")
 
     def stop_recording(self):
         """Stop continuous recording"""
         self.is_recording = False
         if self.recording_thread:
             self.recording_thread.join(timeout=5)
-        print("⏹️ Recording stopped!")
+        print("Recording stopped!")
 
     def _record_loop(self):
         """Background thread that continuously records audio chunks"""
@@ -125,7 +125,7 @@ class AudioManager:
                 self.latest_file = filename
                 
             except Exception as e:
-                print(f"❌ Error in recording loop: {e}")
+                print(f"Error in recording loop: {e}")
                 break
 
     def _save_wav(self, filename: Path, audio_data: np.ndarray, sample_rate: int):
@@ -150,7 +150,7 @@ class AudioManager:
                 file.unlink()
             except:
                 pass
-        print("🗑️ Cleared all recordings")
+        print("Cleared all recordings")
 
 
 # ---------- Manual Test ----------

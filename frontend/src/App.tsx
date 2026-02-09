@@ -3,12 +3,16 @@ import { Home } from './components/Home';
 import { TranslationView } from './components/TranslationView';
 import { Sidebar } from './components/Sidebar';
 import { SaveDialog } from './components/SaveDialog';
+import { Login } from './components/Login';
+import { Signup } from './components/Signup';
 import CornerGlobe from './components/CornerGlobe';
 import { api } from './lib/api';
+import { useAuth } from './contexts/AuthContext';
 import type { SavedChat, TranslationMessage } from './types';
 import './App.css';
 
-function App() {
+function AppContent() {
+    const { currentUser, logout } = useAuth();
     const [isRecording, setIsRecording] = useState(false);
     const [targetLanguage, setTargetLanguage] = useState('en');
     const [messages, setMessages] = useState<TranslationMessage[]>([]);
@@ -16,6 +20,7 @@ function App() {
     const [currentChatId, setCurrentChatId] = useState<string | null>(null);
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [showSaveDialog, setShowSaveDialog] = useState(false);
+    const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
 
     // Load saved chats from localStorage
     useEffect(() => {
@@ -126,8 +131,34 @@ function App() {
     // ONLY show globe on homepage (not recording and no messages)
     const showGlobe = !isRecording && messages.length === 0;
 
+    // Show auth if not logged in
+    if (!currentUser) {
+        return (
+            <>
+                {showAuth === 'login' || showAuth === null ? (
+                    <Login onSwitchToSignup={() => setShowAuth('signup')} />
+                ) : (
+                    <Signup onSwitchToLogin={() => setShowAuth('login')} />
+                )}
+            </>
+        );
+    }
+
     return (
         <div className="app">
+            {/* Logout button */}
+            <button
+                onClick={logout}
+                className="logout-button"
+                title="Logout"
+            >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+            </button>
+
             {/* Globe ONLY shows on homepage */}
             {showGlobe && <CornerGlobe />}
 
@@ -176,6 +207,10 @@ function App() {
             )}
         </div>
     );
+}
+
+function App() {
+    return <AppContent />;
 }
 
 export default App;

@@ -99,6 +99,21 @@ Microphone → Audio Buffer → Queue → VAD Filter → Whisper API → GPT API
 ---
 
 
+## Authentication
+
+Global Chat now includes Firebase authentication:
+- **Email/Password** sign up and login
+- **Google Sign-in** for quick access
+- Secure user sessions
+
+See [FIREBASE_SETUP.md](./FIREBASE_SETUP.md) for setup instructions.
+
+## Recent Improvements
+
+- ✅ **Enhanced Voice Activity Detection (VAD)**: Improved filtering for meeting environments - filters out background noise and only processes actual speech
+- ✅ **Fixed Globe Animation**: Globe now rotates consistently without interruption
+- ✅ **Firebase Authentication**: Secure login and signup with Google sign-in support
+
 ## Future Enhancements
 
 - Add support for system audio capture (not just microphone)
