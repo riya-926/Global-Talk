@@ -6,6 +6,7 @@ interface HomeProps {
     targetLanguage: string;
     onLanguageChange: (lang: string) => void;
     onStartRecording: () => void;
+    onToggleSidebar?: () => void;
 }
 
 const LANGUAGES = [
@@ -27,15 +28,9 @@ export const Home: React.FC<HomeProps> = ({
                                               targetLanguage,
                                               onLanguageChange,
                                               onStartRecording,
+                                              onToggleSidebar,
                                           }) => {
-    const [sidebarVisible, setSidebarVisible] = React.useState(true);
     const [showHelp, setShowHelp] = React.useState(false);
-
-    const toggleSidebar = () => {
-        setSidebarVisible(!sidebarVisible);
-        // Add class to body to shift content
-        document.body.classList.toggle('sidebar-hidden');
-    };
 
     return (
         <div className="home-screen">
@@ -49,8 +44,8 @@ export const Home: React.FC<HomeProps> = ({
                 </div>
             </div>
 
-            {/* Hamburger menu button */}
-            <button className="sidebar-toggle-btn" onClick={toggleSidebar}>
+            {/* Hamburger menu button - opens/closes saved chats sidebar */}
+            <button className="sidebar-toggle-btn" onClick={() => onToggleSidebar?.()}>
                 <span></span>
                 <span></span>
                 <span></span>

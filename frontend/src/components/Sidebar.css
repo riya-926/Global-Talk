@@ -62,17 +62,18 @@ body.sidebar-hidden .sidebar {
     }
 }
 
-/* Align with hamburger: same top (1.5rem) and row height (40px) */
+/* Match hamburger row: same top (1.5rem), height (38px), and visual weight */
 .sidebar-welcome {
     margin-top: 1.5rem;
-    height: 40px;
+    min-height: 38px;
     display: flex;
     align-items: center;
-    padding: 0 2.5rem 0 4.5rem;
+    padding: 0 2.5rem 0 5.5rem;
     color: rgba(255, 255, 255, 0.95);
-    font-size: 0.95rem;
+    font-size: 1.15rem;
     font-weight: 600;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.35px;
+    line-height: 1.2;
     transition: opacity 0.2s ease;
 }
 
@@ -120,9 +121,9 @@ body.sidebar-hidden .sidebar {
     
     .sidebar-welcome {
         margin-top: 1.25rem;
-        height: 38px;
-        padding: 0 1.5rem 0 4rem;
-        font-size: 0.9rem;
+        min-height: 38px;
+        padding: 0 1.5rem 0 5rem;
+        font-size: 1.1rem;
     }
     
     .sidebar-header {

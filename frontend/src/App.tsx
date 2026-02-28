@@ -294,6 +294,13 @@ function AppContent() {
                         targetLanguage={targetLanguage}
                         onLanguageChange={setTargetLanguage}
                         onStartRecording={handleStartRecording}
+                        onToggleSidebar={() => {
+                            setSidebarOpen((prev) => {
+                                const next = !prev;
+                                if (next) document.body.classList.remove('sidebar-hidden');
+                                return next;
+                            });
+                        }}
                     />
                 ) : (
                     <TranslationView
