@@ -26,6 +26,7 @@ body {
     flex-direction: column;
     min-width: 0;
     overflow-x: hidden;
+    transition: opacity 0.25s ease;
 }
 
 .app-header {
@@ -49,7 +50,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -86,7 +87,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -120,6 +121,10 @@ body {
 @media (max-width: 1100px) {
     .corner-globe-container {
         display: none;
+    }
+    /* Prevent hamburger from overlapping "GLOBAL CHAT" and header content */
+    .main-content {
+        padding-left: 5rem;
     }
 }
 

@@ -78,7 +78,7 @@
     background: radial-gradient(circle, rgba(6, 182, 212, 0.4) 0%, transparent 70%);
 }
 
-/* Shooting stars - diagonal streaks */
+/* Floating blurred specks for background texture */
 .landing-shooting-stars {
     position: fixed;
     inset: 0;
@@ -87,125 +87,6 @@
     overflow: hidden;
 }
 
-.landing-star {
-    position: absolute;
-    height: 2px;
-    background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.9) 30%,
-        rgba(200, 180, 255, 0.8) 60%,
-        rgba(168, 85, 247, 0.4) 100%
-    );
-    transform-origin: left center;
-    filter: blur(0.5px);
-}
-
-/* Diagonal shooting stars: each streaks across the screen diagonally */
-.landing-star-1 {
-    width: 140px;
-    top: 5%;
-    left: -10%;
-    animation: landing-shooting-star-diagonal 8s linear infinite;
-}
-
-.landing-star-2 {
-    width: 120px;
-    top: 20%;
-    right: -5%;
-    left: auto;
-    animation: landing-shooting-star-diagonal-reverse 10s linear infinite;
-    animation-delay: -3s;
-}
-
-.landing-star-3 {
-    width: 100px;
-    top: 45%;
-    left: -8%;
-    animation: landing-shooting-star-diagonal 12s linear infinite;
-    animation-delay: -5s;
-}
-
-.landing-star-4 {
-    width: 130px;
-    top: 65%;
-    right: -5%;
-    left: auto;
-    animation: landing-shooting-star-diagonal-reverse 9s linear infinite;
-    animation-delay: -2s;
-}
-
-.landing-star-5 {
-    width: 90px;
-    top: 10%;
-    left: 30%;
-    animation: landing-shooting-star-diagonal 11s linear infinite;
-    animation-delay: -7s;
-}
-
-.landing-star-6 {
-    width: 110px;
-    top: 70%;
-    right: 20%;
-    left: auto;
-    animation: landing-shooting-star-diagonal-reverse 7s linear infinite;
-    animation-delay: -4s;
-}
-
-.landing-star-7 {
-    width: 95px;
-    top: 35%;
-    left: 15%;
-    animation: landing-shooting-star-diagonal 9s linear infinite;
-    animation-delay: -6s;
-}
-
-.landing-star-8 {
-    width: 85px;
-    top: 85%;
-    right: 10%;
-    left: auto;
-    animation: landing-shooting-star-diagonal-reverse 11s linear infinite;
-    animation-delay: -1s;
-}
-
-/* Diagonal streak: top-left → bottom-right (angled line, linear motion) + twinkle */
-@keyframes landing-shooting-star-diagonal {
-    0% {
-        opacity: 0;
-        transform: rotate(-35deg) translate(-120px, -60px);
-    }
-    5% { opacity: 0.95; }
-    15% { opacity: 0.7; }
-    25% { opacity: 1; }
-    35% { opacity: 0.6; }
-    50% { opacity: 0.8; }
-    75% { opacity: 0.4; }
-    100% {
-        opacity: 0;
-        transform: rotate(-35deg) translate(110vw, 75vh);
-    }
-}
-
-/* Diagonal streak: top-right → bottom-left + twinkle */
-@keyframes landing-shooting-star-diagonal-reverse {
-    0% {
-        opacity: 0;
-        transform: rotate(35deg) translate(120px, -60px);
-    }
-    5% { opacity: 0.95; }
-    15% { opacity: 0.6; }
-    25% { opacity: 1; }
-    40% { opacity: 0.5; }
-    60% { opacity: 0.9; }
-    80% { opacity: 0.3; }
-    100% {
-        opacity: 0;
-        transform: rotate(35deg) translate(-110vw, 75vh);
-    }
-}
-
-/* Floating white/colored specks - more white hues, twinkle */
 .landing-speck {
     position: absolute;
     border-radius: 50%;
@@ -350,40 +231,16 @@
 }
 
 .landing-logo-icon {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #7c3aed, #a855f7);
-    border-radius: 8px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 3px;
-    padding-bottom: 6px;
+    flex-shrink: 0;
+    display: block;
 }
-
-.landing-logo-icon span {
-    width: 4px;
-    background: white;
-    border-radius: 2px;
-}
-
-.landing-logo-icon span:nth-child(1) { height: 12px; }
-.landing-logo-icon span:nth-child(2) { height: 18px; }
-.landing-logo-icon span:nth-child(3) { height: 24px; }
-.landing-logo-icon span:nth-child(4) { height: 14px; }
 
 .landing-logo-icon-sm {
-    width: 28px;
-    height: 28px;
-    padding-bottom: 4px;
-}
-
-.landing-logo-icon-sm span {
-    width: 3px;
+    /* smaller size via GlobeLogo size prop */
 }
 
 .landing-logo-text {
-    font-size: 1.25rem;
+    font-size: 1.6rem;
     font-weight: 700;
 }
 
@@ -392,19 +249,13 @@
     position: relative;
     z-index: 10;
     padding: 4rem clamp(1.5rem, 5vw, 4rem) 6rem;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     max-width: 1600px;
     margin: 0 auto;
-}
-
-@media (min-width: 1200px) {
-    .landing-hero {
-        grid-template-columns: minmax(0, 1fr) minmax(200px, 400px);
-        align-items: center;
-        gap: 4rem;
-    }
 }
 
 .landing-hero-content {
@@ -439,6 +290,7 @@
 
 .landing-hero-buttons {
     display: flex;
+    justify-content: center;
     gap: 1rem;
     margin-bottom: 2.5rem;
 }
@@ -471,6 +323,8 @@
 
 .landing-features-inline {
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 2rem;
     color: rgba(255, 255, 255, 0.7);
     font-size: 0.95rem;
@@ -700,7 +554,11 @@
     align-items: center;
     gap: 0.5rem;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1.15rem;
+}
+
+.landing-footer-text {
+    font-size: 1.2rem;
 }
 
 .landing-footer-copy {
@@ -710,24 +568,6 @@
 
 /* Full screen: add decorative hero visual, scale up content */
 @media (min-width: 1200px) {
-    .landing-hero-visual {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 400px;
-        position: relative;
-    }
-    
-    .landing-hero-visual::before {
-        content: '';
-        position: absolute;
-        width: 300px;
-        height: 300px;
-        background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
-        border-radius: 50%;
-        filter: blur(40px);
-    }
-
     .landing-hero-title {
         font-size: 4rem;
     }
@@ -824,10 +664,6 @@
     .landing-cta-card h2 {
         font-size: 3rem;
     }
-}
-
-.landing-hero-visual {
-    display: none;
 }
 
 /* Responsive */

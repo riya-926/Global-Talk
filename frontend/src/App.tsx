@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Home } from './components/Home';
 import { TranslationView } from './components/TranslationView';
 import { Sidebar } from './components/Sidebar';
@@ -9,6 +9,7 @@ import { Signup } from './components/Signup';
 import CornerGlobe from './components/CornerGlobe';
 import { api } from './lib/api';
 import { useAuth } from './contexts/AuthContext';
+import { subscribeToUserChats, saveChat, deleteChat, renameChat } from './lib/chats';
 import type { SavedChat, TranslationMessage } from './types';
 import './App.css';
 
@@ -21,22 +22,44 @@ function AppContent() {
     const [currentChatId, setCurrentChatId] = useState<string | null>(null);
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [showSaveDialog, setShowSaveDialog] = useState(false);
+    const [saveDialogDefaultName, setSaveDialogDefaultName] = useState('');
     const [showAuth, setShowAuth] = useState<'login' | 'signup' | null>(null);
+    const lastSavedChatIdRef = useRef<string | null>(null);
 
-    // Load saved chats from localStorage
+    // Subscribe to current user's chats from Firestore (real-time, synced across devices)
     useEffect(() => {
-        const saved = localStorage.getItem('globalChats');
-        if (saved) {
-            setSavedChats(JSON.parse(saved));
+        if (!currentUser) {
+            setSavedChats([]);
+            return;
         }
-    }, []);
+        const uid = currentUser.uid;
 
-    // Save chats to localStorage whenever they change
-    useEffect(() => {
-        if (savedChats.length > 0) {
-            localStorage.setItem('globalChats', JSON.stringify(savedChats));
+        // One-time migration: move any chats from localStorage to Firestore
+        const storageKey = `globalChats_${uid}`;
+        const stored = localStorage.getItem(storageKey);
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored) as SavedChat[];
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    Promise.all(
+                        parsed.map((chat) =>
+                            saveChat(uid, {
+                                name: chat.name,
+                                timestamp: chat.timestamp,
+                                messages: chat.messages,
+                                targetLanguage: chat.targetLanguage
+                            })
+                        )
+                    ).then(() => localStorage.removeItem(storageKey));
+                }
+            } catch {
+                localStorage.removeItem(storageKey);
+            }
         }
-    }, [savedChats]);
+
+        const unsubscribe = subscribeToUserChats(uid, setSavedChats);
+        return () => unsubscribe();
+    }, [currentUser?.uid]);
 
     // Poll for new messages when recording
     useEffect(() => {
@@ -73,30 +96,87 @@ function AppContent() {
             await api.stopRecording();
             setIsRecording(false);
 
-            // Always show save dialog when stopping
+            // Auto-save to user's account so the conversation is never lost
+            if (currentUser && messages.length > 0) {
+                const defaultName = `Conversation ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                setSaveDialogDefaultName(defaultName);
+                lastSavedChatIdRef.current = null;
+                try {
+                    const docId = await saveChat(currentUser.uid, {
+                        name: defaultName,
+                        timestamp: new Date().toISOString(),
+                        messages,
+                        targetLanguage
+                    });
+                    setCurrentChatId(docId);
+                    lastSavedChatIdRef.current = docId;
+                    setSavedChats((prev) => {
+                        const next: SavedChat[] = [{
+                            id: docId,
+                            name: defaultName,
+                            timestamp: new Date().toISOString(),
+                            messages,
+                            targetLanguage
+                        }, ...prev];
+                        return next;
+                    });
+                } catch (err) {
+                    console.error('Failed to auto-save chat:', err);
+                    setSaveDialogDefaultName('');
+                    alert('Could not save conversation. Please try saving again from the dialog.');
+                }
+            } else {
+                setSaveDialogDefaultName('');
+            }
             setShowSaveDialog(true);
         } catch (error) {
             console.error('Error stopping recording:', error);
         }
     };
 
-    const handleSaveChat = (chatName: string) => {
-        if (currentChatId) {
-            const newChat: SavedChat = {
-                id: currentChatId,
-                name: chatName,
-                timestamp: new Date().toISOString(),
-                messages: messages,
-                targetLanguage: targetLanguage
-            };
-            setSavedChats(prev => [newChat, ...prev]);
+    const handleSaveChat = async (chatName: string) => {
+        if (!currentUser) {
+            setShowSaveDialog(false);
+            setMessages([]);
+            setCurrentChatId(null);
+            return;
         }
+        const name = chatName.trim() || 'Untitled Chat';
+        const chatIdToRename = lastSavedChatIdRef.current ?? currentChatId;
+        try {
+            if (chatIdToRename) {
+                await renameChat(chatIdToRename, name);
+                setSavedChats((prev) =>
+                    prev.map((c) => (c.id === chatIdToRename ? { ...c, name } : c))
+                );
+            } else if (messages.length > 0) {
+                const docId = await saveChat(currentUser.uid, {
+                    name,
+                    timestamp: new Date().toISOString(),
+                    messages,
+                    targetLanguage
+                });
+                setSavedChats((prev) => [{
+                    id: docId,
+                    name,
+                    timestamp: new Date().toISOString(),
+                    messages,
+                    targetLanguage
+                }, ...prev]);
+            }
+        } catch (err) {
+            console.error('Failed to save chat:', err);
+            alert('Failed to save conversation. Check your connection and try again.');
+            return;
+        }
+        lastSavedChatIdRef.current = null;
         setShowSaveDialog(false);
         setMessages([]);
         setCurrentChatId(null);
     };
 
     const handleDiscardChat = () => {
+        lastSavedChatIdRef.current = null;
         setShowSaveDialog(false);
         setMessages([]);
         setCurrentChatId(null);
@@ -109,18 +189,24 @@ function AppContent() {
         setSidebarOpen(false);
     };
 
-    const handleDeleteChat = (chatId: string) => {
-        setSavedChats(prev => prev.filter(chat => chat.id !== chatId));
+    const handleDeleteChat = async (chatId: string) => {
         if (currentChatId === chatId) {
             setMessages([]);
             setCurrentChatId(null);
         }
+        try {
+            await deleteChat(chatId);
+        } catch (err) {
+            console.error('Failed to delete chat:', err);
+        }
     };
 
-    const handleRenameChat = (chatId: string, newName: string) => {
-        setSavedChats(prev => prev.map(chat =>
-            chat.id === chatId ? { ...chat, name: newName } : chat
-        ));
+    const handleRenameChat = async (chatId: string, newName: string) => {
+        try {
+            await renameChat(chatId, newName);
+        } catch (err) {
+            console.error('Failed to rename chat:', err);
+        }
     };
 
     const handleNewChat = () => {
@@ -182,7 +268,11 @@ function AppContent() {
             {/* Hamburger menu button for small screens */}
             <button
                 className="hamburger-menu"
-                onClick={() => setSidebarOpen(!sidebarOpen)}
+                onClick={() => {
+                    const next = !sidebarOpen;
+                    setSidebarOpen(next);
+                    if (next) document.body.classList.remove('sidebar-hidden');
+                }}
             >
                 ☰
             </button>
@@ -216,6 +306,7 @@ function AppContent() {
 
             {showSaveDialog && (
                 <SaveDialog
+                    defaultName={saveDialogDefaultName}
                     onSave={handleSaveChat}
                     onDiscard={handleDiscardChat}
                 />

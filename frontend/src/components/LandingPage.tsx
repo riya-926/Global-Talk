@@ -1,4 +1,5 @@
 import React from 'react';
+import { GlobeLogo } from './GlobeLogo';
 import './LandingPage.css';
 
 interface LandingPageProps {
@@ -17,16 +18,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
                 <div className="landing-blur landing-blur-1" />
                 <div className="landing-blur landing-blur-2" />
             </div>
-            {/* Floating white/light shooting-star specs - more stars, twinkle effect */}
+            {/* Floating blurred specks for background texture */}
             <div className="landing-shooting-stars" aria-hidden="true">
-                <div className="landing-star landing-star-1" />
-                <div className="landing-star landing-star-2" />
-                <div className="landing-star landing-star-3" />
-                <div className="landing-star landing-star-4" />
-                <div className="landing-star landing-star-5" />
-                <div className="landing-star landing-star-6" />
-                <div className="landing-star landing-star-7" />
-                <div className="landing-star landing-star-8" />
                 <div className="landing-speck landing-speck-1" />
                 <div className="landing-speck landing-speck-2" />
                 <div className="landing-speck landing-speck-3" />
@@ -42,14 +35,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
             {/* Header */}
             <header className="landing-header">
                 <div className="landing-logo">
-                    <div className="landing-logo-icon">
-                        <span /><span /><span /><span />
-                    </div>
+                    <GlobeLogo className="landing-logo-icon" size={56} />
                     <span className="landing-logo-text">Global Chat</span>
                 </div>
             </header>
 
-            {/* Hero Section */}
+            {/* Hero Section - centered */}
             <section className="landing-hero">
                 <div className="landing-hero-content">
                     <span className="landing-pill">Real-Time Meeting Translator</span>
@@ -68,7 +59,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
                         <span className="landing-feature-dot">100+ Languages</span>
                     </div>
                 </div>
-                <div className="landing-hero-visual" aria-hidden="true" />
             </section>
 
             {/* Features Section */}
@@ -132,10 +122,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
             {/* Footer */}
             <footer className="landing-footer">
                 <div className="landing-footer-logo">
-                    <div className="landing-logo-icon landing-logo-icon-sm">
-                        <span /><span /><span /><span />
-                    </div>
-                    <span>Global Chat</span>
+                    <GlobeLogo className="landing-logo-icon landing-logo-icon-sm" size={36} />
+                    <span className="landing-footer-text">Global Chat</span>
                 </div>
                 <span className="landing-footer-copy">© 2026 Global Chat. All rights reserved.</span>
             </footer>
